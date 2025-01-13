@@ -1,0 +1,13 @@
+Providers use cases:
+#Appointments:
+	- CRUD
+#Patients:
+	- Read and modify, not create(?)
+	- EMR: CRUD
+
+Patients use cases
+	- Create account (patient)
+	- Create appointments
+	- See their appointments
+	- Join video call
+

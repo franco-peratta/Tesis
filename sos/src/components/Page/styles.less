@@ -1,0 +1,47 @@
+.layout {
+  height: 100vh;
+  width: 100vw;
+  overflow: none;
+}
+
+.content {
+  height: 100%;
+  width: 100%;
+  overflow: scroll;
+  padding: 1em 2em;
+  background-color: #eee;
+}
+
+@media (max-width: 899px) {
+  .content {
+    padding: 1em;
+    background-color: #fff;
+  }
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 25% 50% 25%;
+  grid-gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  padding: 0 1.5em;
+}
+.left {
+  width: 110px;
+  justify-self: left;
+  cursor: pointer;
+}
+.center {
+  justify-self: center;
+}
+.right {
+  justify-self: right;
+}
+
+.header--mobile {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1.5em;
+}
