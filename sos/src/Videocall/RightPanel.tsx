@@ -39,7 +39,6 @@ function calculateAge(dob: string): number {
     return -1
   }
 
-  // Calculate the age
   return moment().diff(parsedDate, "years")
 }
 
