@@ -1,7 +1,12 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { Card, Popconfirm, Tabs, Tag, Typography } from "antd"
-import { CloseOutlined, DeleteOutlined, PhoneOutlined } from "@ant-design/icons"
+import {
+  CloseOutlined,
+  DeleteOutlined,
+  PhoneOutlined,
+  CheckOutlined
+} from "@ant-design/icons"
 import { PatientWithAppointments } from "./model"
 import { statusColorMapping } from "../Appointments/model"
 import { Bubble } from "../components/Bubble"
@@ -12,7 +17,10 @@ import { toPatients } from "./routes"
 import { errorNotification, successNotification } from "../Notification"
 import { updateEMR } from "../EMR/Handler"
 import "./styles.less"
-import { deleteAppointment } from "../Appointments/Handler"
+import {
+  changeAppointmentStatusById,
+  deleteAppointment
+} from "../Appointments/Handler"
 
 const { Title, Text } = Typography
 const { TabPane } = Tabs
@@ -153,6 +161,25 @@ const Details = ({
                 cancelText="No"
               >
                 <DeleteOutlined key="delete" />
+              </Popconfirm>,
+              <Popconfirm
+                placement="top"
+                title={"Finalizar llamada?"}
+                onConfirm={async () => {
+                  try {
+                    await changeAppointmentStatusById(app.id, "terminado")
+                    navigate(0)
+                  } catch (err) {
+                    console.error(err)
+                  }
+                }}
+                okText="Si"
+                cancelText="No"
+              >
+                <CheckOutlined
+                  key="check"
+                  disabled={app.status === "terminado"}
+                />
               </Popconfirm>,
               <Popconfirm
                 placement="top"

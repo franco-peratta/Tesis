@@ -1,17 +1,10 @@
 # TODO
 
 - IMPROVE EMR formatting
-- Mejorar template y los emails y ver que funcionen
-- AGREGAR BOTON DE END CALL EN EL PANEL DERECHO
+- Mejorar template de los emails (Agregar hora y link a la llamada)
 - Implementar duracion dinamica de los turnos (?)
-- Las apps de react a veces se desloguean (la de provider a veces pierde cual es el provider, quizas no se desloguea)
-- Agregar el componente de solicitar turno a la app del paciente
 - Hacer mobile friendly la app del paciente
-
-# PRIORIDADES:
-
-1- AGREGAR BOTON DE END CALL EN EL PANEL DERECHO (redireccionar a otra home, y marcar turno como finalizado)
-2- Agregar el componente de solicitar turno a la app del paciente
+- Agregar el componente de solicitar turno a la app del paciente
 
 INFORME:
 
