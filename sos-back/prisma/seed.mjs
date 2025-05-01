@@ -29,7 +29,7 @@ async function seed() {
 		}
 	})
 
-	const shifts = {
+	const shifts = JSON.stringify({
 		monday: {
 			available: true,
 			shifts: [
@@ -67,7 +67,7 @@ async function seed() {
 			available: false,
 			shifts: []
 		}
-	}
+	})
 
 	const { provider: cami } = await prisma.user.create({
 		data: {

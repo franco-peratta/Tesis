@@ -28,7 +28,7 @@ export const addProvider = async (provider: Omit<User & Provider, "id">) => {
 		data: {
 			name: provider.name,
 			phoneNumber: provider.phoneNumber,
-			shifts: provider.shifts || {},
+			shifts: provider.shifts || "{}",
 			user: {
 				create: {
 					email: provider.email,
@@ -49,7 +49,7 @@ export const updateProvider = async (id: number, provider: Provider) => {
 		data: {
 			name: provider.name,
 			phoneNumber: provider.phoneNumber,
-			shifts: provider.shifts || {}
+			shifts: provider.shifts || "{}"
 		}
 	})
 

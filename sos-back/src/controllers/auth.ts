@@ -1,4 +1,4 @@
-import { Patient, Provider, Role, User } from "@prisma/client"
+import { Patient, Provider, User } from "@prisma/client"
 import { Request, Response } from "express"
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
@@ -108,7 +108,7 @@ const createPatientUser = async (data: TPatientUser) => {
 	const newUser = {
 		email: data.email,
 		password: hashedPassword,
-		role: "patient" as Role,
+		role: "patient",
 		name: data.name,
 		dni: data.dni,
 		dob: data.dob,
@@ -126,7 +126,7 @@ const createProviderUser = async (data: TProviderUser) => {
 	const newUser: TProviderUser = {
 		email: data.email,
 		password: hashedPassword,
-		role: "provider" as Role,
+		role: "provider",
 		name: data.name,
 		shifts: data.shifts,
 		phoneNumber: data.phoneNumber

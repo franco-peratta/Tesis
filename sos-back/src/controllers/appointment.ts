@@ -214,7 +214,7 @@ const calculateSlots = (
 	type DaysOfTheWeek = (typeof daysOfWeek)[number]
 	const currentDayName = daysOfWeek[date.getDay()] as DaysOfTheWeek
 
-	const providerWholeShift = provider.shifts as Shifts
+	const providerWholeShift = JSON.parse(provider.shifts) as Shifts
 
 	const shifts = providerWholeShift[currentDayName].shifts
 
