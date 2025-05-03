@@ -94,7 +94,7 @@ export const RightPanel = ({
                 block
                 onClick={() => {
                   const currentOrigin = window.location.origin;
-                  const newPath = "/turnos/nuevo";
+                  const newPath = `/turnos/nuevo?patient=${patientInfo.id}`;
                   window.open(new URL(newPath, currentOrigin).toString(), "_blank");
                 }}
               >

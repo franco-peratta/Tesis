@@ -1,11 +1,12 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import { Card, Popconfirm, Tabs, Tag, Typography } from "antd"
+import { Button, Card, Popconfirm, Space, Tabs, Tag, Typography } from "antd"
 import {
   CloseOutlined,
   DeleteOutlined,
   PhoneOutlined,
-  CheckOutlined
+  CheckOutlined,
+  PlusOutlined
 } from "@ant-design/icons"
 import { PatientWithAppointments } from "./model"
 import { statusColorMapping } from "../Appointments/model"
@@ -136,6 +137,19 @@ const Details = ({
       </div>
       <br />
       <div>
+        <div className="flex--space-between">
+          <Title>Turnos proximos</Title>
+          <Button
+            onClick={() => navigate(`/turnos/nuevo?patient=${patient.id}`)}
+            type="default"
+            size="large"
+          >
+            <Space direction="horizontal">
+              <PlusOutlined />
+              Crear turno
+            </Space>
+          </Button>
+        </div>
         <Title level={3}>Turnos</Title>
         <div className="row">
           {patient.Appointment?.map((app) => {

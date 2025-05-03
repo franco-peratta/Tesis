@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import moment, { Moment } from "moment"
 import {
   Form,
@@ -31,6 +31,9 @@ const steps = ["Elegir paciente", "Elegir fecha", "Validar datos"]
 
 export const NewAppointment = () => {
   const navigate = useNavigate()
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const patientId = queryParams.get('patient');
 
   const { user } = useAuth()
 
@@ -44,16 +47,25 @@ export const NewAppointment = () => {
   const [disabledTime, setDisabledTime] = useState<any>()
 
   useEffect(() => {
+    // Fetch patients and providers
     Promise.all([getPatients(), getProvidersList()])
       .then(([{ data: patients }, { data: medics }]) => {
         setPatients(patients)
         setMedics(medics)
         setIsLoading(false)
+
+        // Check if the query param 'patient' exists and set the value in the form
+        if (patientId && patients?.length) {
+          const selected_patient = patients.find(p => p.id = patientId)
+          selected_patient && idForm.setFieldsValue({
+            patient: selected_patient.id,
+          })
+        }
       })
       .catch(() => {
         errorNotification("Error al cargar los datos")
       })
-  }, [])
+  }, [idForm, patientId])
 
   const next = useCallback(() => {
     if (current === 0) {
@@ -302,7 +314,7 @@ export const NewAppointment = () => {
               >
                 {patients &&
                   patients.map((p, index) => (
-                    <Option key={index} value={p.id}>
+                    <Option key={`patient${index}`} value={p.id}>
                       {p.name}
                     </Option>
                   ))}
