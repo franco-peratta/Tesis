@@ -92,11 +92,14 @@ export const RightPanel = ({
                 type="primary"
                 size="large"
                 block
-                onClick={() => console.log("Crear turno")}
+                onClick={() => {
+                  const currentOrigin = window.location.origin;
+                  const newPath = "/turnos/nuevo";
+                  window.open(new URL(newPath, currentOrigin).toString(), "_blank");
+                }}
               >
-                <FileTextOutlined style={{}} />
+                <FileTextOutlined />
                 Crear turno
-
               </Button>
             </Space>
 

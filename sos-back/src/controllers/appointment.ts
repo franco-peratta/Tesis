@@ -4,7 +4,7 @@ import {
 	getAllAppointments,
 	getById,
 	getByPatientId,
-	getByProviderId
+	getByProviderIdAndStatus
 } from "../repos/appointment"
 import { Appointment, Provider } from "@prisma/client"
 import { sendEmail } from "../email"
@@ -49,8 +49,9 @@ export const getAppointmentsByProviderId = async (
 	res: Response
 ) => {
 	const providerId = parseInt(req.params.id)
+	const statusList = (req.query?.status as string).split(",")
 	try {
-		const data = await getByProviderId(providerId)
+		const data = await getByProviderIdAndStatus(providerId, statusList)
 		res.json({ msg: "Turno obtenido con exito", data })
 	} catch (error) {
 		res.json({ msg: "Error, no se pudo obtener el turno", error })

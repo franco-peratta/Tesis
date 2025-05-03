@@ -19,6 +19,10 @@ export const getAppointmentsByProviderId = (id: string) => {
   return http<Appointment[]>("GET", `/appointment/provider/${id}`)
 }
 
+export const getUpcomingAppointmentsByProviderId = (id: string) => {
+  return http<Appointment[]>("GET", `/appointment/provider/${id}?status=en_progreso,espera`)
+}
+
 export const getProvidersList = () => {
   return http<Provider[]>("GET", `/provider`)
 }

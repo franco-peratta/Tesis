@@ -1,11 +1,9 @@
 # TODO
 
-- IMPROVE EMR formatting
 - Agregar el componente de solicitar turno al perfil del paciente en provider app
-- Agrupar turnos por estados. La pagina de turnos esta muy verde
 - Agregar el componente de solicitar turno a la app del paciente
-- Reset password
 - Hacer mobile friendly la app del paciente
+- Reset password
 
 INFORME:
 - Agregar euna evaluacion mia personal en los antecedentes. Decir por que sirve o por que no, limitaciones, si sirve para un fin solidario.

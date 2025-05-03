@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router"
+import { Link } from "react-router-dom"
 import {
   Typography,
   Button,
@@ -16,7 +17,7 @@ import { Bubble } from "../components/Bubble"
 import {
   changeAppointmentStatusById,
   deleteAppointment,
-  getAppointmentsByProviderId
+  getUpcomingAppointmentsByProviderId
 } from "./Handler"
 import { Loader } from "../components/Loader"
 import { infoNotification } from "../Notification"
@@ -34,7 +35,7 @@ export const Appointments = () => {
   const [appointments, setAppointments] = useState<Appointment[]>()
 
   useEffect(() => {
-    getAppointmentsByProviderId(user.id)
+    getUpcomingAppointmentsByProviderId(user.id)
       .then(({ data }) => setAppointments(data))
       .finally(() => setLoading(false))
   }, [user])
@@ -57,7 +58,7 @@ export const Appointments = () => {
   return (
     <Bubble>
       <div className="flex--space-between">
-        <Title>Turnos</Title>
+        <Title>Turnos proximos</Title>
         <Button
           onClick={() => navigate("/turnos/nuevo")}
           type="default"
@@ -124,7 +125,11 @@ export const Appointments = () => {
               >
                 <div className="flex--space-between ">
                   <Meta
-                    title={app.patient?.name}
+                    title={
+                      <Link to={`/pacientes/${app.patient?.id}`}>
+                        {app.patient?.name}
+                      </Link>
+                    }
                     description={
                       <div>
                         <Text>{app.patient?.phoneNumber}</Text>
