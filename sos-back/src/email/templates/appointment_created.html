@@ -1,87 +1,107 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<style>
-			/* Email styling */
-			body {
-				margin: 0;
-				padding: 0;
-				font-family: Arial, sans-serif;
-				background-color: #0babdd;
-				color: #ffffff;
-			}
 
-			/* Container to center the email content */
-			.container {
-				max-width: 600px;
-				margin: 0 auto;
-				padding: 20px;
-			}
+<head>
+	<style>
+		/* Email styling */
+		body {
+			margin: 0;
+			padding: 0;
+			font-family: Arial, sans-serif;
+			background-color: #0babdd;
+			color: #ffffff;
+		}
 
-			/* Company logo styling */
-			.logo {
-				text-align: center;
-				margin-bottom: 20px;
-			}
+		/* Container to center the email content */
+		.container {
+			max-width: 600px;
+			margin: 0 auto;
+			padding: 20px;
+		}
 
-			.logo img {
-				max-width: 200px;
-			}
+		/* Company logo styling */
+		.logo {
+			text-align: center;
+			margin-bottom: 20px;
+		}
 
-			/* Email content styling */
-			.content {
-				text-align: center;
-			}
+		.logo img {
+			max-width: 200px;
+		}
 
-			.content h1 {
-				font-size: 28px;
-				margin-bottom: 20px;
-			}
+		/* Email content styling */
+		.content {
+			text-align: center;
+		}
 
-			.content p {
-				font-size: 16px;
-				line-height: 1.6;
-			}
+		.content h1 {
+			font-size: 28px;
+			margin-bottom: 20px;
+		}
 
-			/* Footer styling */
-			.footer {
-				margin-top: 20px;
-				text-align: center;
-			}
+		.content p {
+			font-size: 16px;
+			line-height: 1.6;
+		}
 
-			.footer p {
-				font-size: 14px;
-			}
-		</style>
-	</head>
-	<body>
-		<div class="container">
-			<!-- Company logo -->
-			<div class="logo">
-				<img
-					src="https://saludonlinesolidaria.com/wp-content/uploads/2021/01/logo-cortado.fw_-150x87.png"
-					alt="Company Logo"
-				/>
-			</div>
+		/* Appointment link button */
+		.appointment-link {
+			display: inline-block;
+			margin-top: 20px;
+			padding: 12px 24px;
+			background-color: #ffffff;
+			color: #0babdd;
+			text-decoration: none;
+			font-weight: bold;
+			border-radius: 4px;
+		}
 
-			<!-- Email content -->
-			<div class="content">
-				<h1>Hola {{nombre}},</h1>
-				<p>
-					Le informamos que su turno con {{medico}} ha sido creado con éxito.
-				</p>
-				<p>La fecha de su turno esta agendada para el {{fecha}}</p>
-				<p>Muchas gracias,</p>
-				<p>Salud Online Solidaria</p>
-			</div>
+		/* Footer styling */
+		.footer {
+			margin-top: 20px;
+			text-align: center;
+		}
 
-			<!-- Footer -->
-			<div class="footer">
-				<p>
-					If you have any questions or need further assistance, please contact
-					us at support@example.com.
-				</p>
-			</div>
+		.footer p {
+			font-size: 14px;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<!-- Company logo -->
+		<div class="logo">
+			<img src="https://saludonlinesolidaria.com/wp-content/uploads/2021/01/logo-cortado.fw_-150x87.png"
+				alt="Company Logo" />
 		</div>
-	</body>
+
+		<!-- Email content -->
+		<div class="content">
+			<h1>Hola {{nombre}},</h1>
+			<p>
+				Le informamos que su turno con {{medico}} ha sido creado con éxito.
+			</p>
+			<p>La fecha de su turno esta agendada para el {{fecha}}</p>
+
+			<!-- Appointment link -->
+			<a href="https://meet.jit.si/{{appointment_id}}" class="appointment-link" target="_blank"
+				rel="noopener noreferrer">
+				Para conectarse a su turno, haga click en este enlace.
+			</a>
+
+			<p>Muchas gracias,</p>
+			<p>Salud Online Solidaria</p>
+		</div>
+
+		<!-- Footer -->
+		<div class="footer">
+			<p>
+				If you have any questions or need further assistance, please contact
+				us at support@example.com.
+			</p>
+		</div>
+	</div>
+</body>
+
 </html>

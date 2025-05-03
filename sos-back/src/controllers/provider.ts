@@ -7,7 +7,7 @@ export const getAll = async (req: Request, res: Response) => {
 		const data = await repo.getAll()
 		res.json({ data })
 	} catch (error) {
-		console.log(error)
+		console.error(error)
 		res.json({ msg: "Error, no se pudo obtener los provedores", error })
 	}
 }
@@ -19,7 +19,7 @@ export const getProviderById = async (req: Request, res: Response) => {
 
 		res.json({ msg: "provider obetenido exitosamente", data })
 	} catch (error) {
-		console.log(error)
+		console.error(error)
 		res.json({ msg: "Error, no se pudo obtener el provedor", error })
 	}
 }
@@ -65,7 +65,7 @@ export const deleteProvider = async (req: Request, res: Response) => {
 		const data = await repo.deleteProvider(providerId)
 		res.json({ msg: "provedor eliminado con exito", data })
 	} catch (error) {
-		console.log(error)
+		console.error(error)
 		res
 			.status(500)
 			.json({ msg: "Error, no se pudo eliminar el provedor", error })

@@ -11,7 +11,6 @@ import { PatientWithAppointments } from "./model"
 import { statusColorMapping } from "../Appointments/model"
 import { Bubble } from "../components/Bubble"
 import { Loader } from "../components/Loader"
-import { EMR } from "../EMR"
 import { getPatientByIdWithAppointments } from "./Handler"
 import { toPatients } from "./routes"
 import { errorNotification, successNotification } from "../Notification"
@@ -21,6 +20,7 @@ import {
   changeAppointmentStatusById,
   deleteAppointment
 } from "../Appointments/Handler"
+import { EMR } from "../EMR"
 
 const { Title, Text } = Typography
 const { TabPane } = Tabs
@@ -81,7 +81,10 @@ export const PatientDetails = () => {
           </TabPane>
           <TabPane tab="Historia Clinica" key="2">
             <div className="flex--columns">
-              <EMR patient={patient} updateEmr={changeEmr} />
+              <EMR
+                initialMarkdown={patient.emr}
+                onSave={(markdown: string) => changeEmr(markdown)}
+              />
             </div>
           </TabPane>
         </Tabs>

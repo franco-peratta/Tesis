@@ -8,7 +8,7 @@ export const getAll = async (req: Request, res: Response) => {
 		res.json({ data })
 	} catch (error) {
 		res.json({ msg: "Error, no se pudieron obtener los usuarios", error })
-		console.log(error)
+		console.error(error)
 	}
 }
 
@@ -24,7 +24,7 @@ export const getUserById = async (req: Request, res: Response) => {
 		res.json({ msg: "Usuario obtenido con éxito", data })
 	} catch (error) {
 		res.json({ msg: "Error, no se pudo obtener el usuario", error })
-		console.log(error)
+		console.error(error)
 	}
 }
 
@@ -120,7 +120,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 
 		res.status(204).end()
 	} catch (error) {
-		console.log(error)
+		console.error(error)
 		res.status(500).json({ error: "Algo salio mal.." })
 	}
 }
@@ -138,6 +138,6 @@ export const deleteUserOG = async (req: Request, res: Response) => {
 		res
 			.status(500)
 			.json({ msg: "Error, no se pudo eliminar el usuario", error })
-		console.log(error)
+		console.error(error)
 	}
 }

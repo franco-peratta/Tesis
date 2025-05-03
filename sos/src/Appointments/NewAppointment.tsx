@@ -18,7 +18,7 @@ import { Bubble } from "../components/Bubble"
 import { Patient } from "../Patient/model"
 import { getPatients } from "../Patient/Handler"
 import { addAppointment, getOccupiedSlots, getProvidersList } from "./Handler"
-import { Provider } from "../Profile/Model"
+import { Provider, Shifts } from "../Profile/Model"
 import { errorNotification, successNotification } from "../Notification"
 import { Status } from "./model"
 import { useAuth } from "../Auth/useAuth"
@@ -60,7 +60,7 @@ export const NewAppointment = () => {
       idForm
         .validateFields()
         .then(() => setCurrent((current) => current + 1))
-        .catch(() => {})
+        .catch(() => { })
     }
     if (current === 1) {
       detailsForm
@@ -68,7 +68,6 @@ export const NewAppointment = () => {
         .then(() => setCurrent((current) => current + 1))
         .catch((e) => {
           console.error(e)
-          console.log(detailsForm.getFieldsValue())
         })
     }
   }, [idForm, detailsForm, current])
@@ -129,14 +128,15 @@ export const NewAppointment = () => {
 
     if (!selectedMedic) return disablePreviousDates
 
+    const shifts = JSON.parse(selectedMedic.shifts) as Shifts
     const daysOff = []
-    !selectedMedic.shifts.monday.available && daysOff.push(1)
-    !selectedMedic.shifts.tuesday.available && daysOff.push(2)
-    !selectedMedic.shifts.wednesday.available && daysOff.push(3)
-    !selectedMedic.shifts.thursday.available && daysOff.push(4)
-    !selectedMedic.shifts.friday.available && daysOff.push(5)
-    !selectedMedic.shifts.saturday.available && daysOff.push(6)
-    !selectedMedic.shifts.sunday.available && daysOff.push(0)
+    !shifts.monday.available && daysOff.push(1)
+    !shifts.tuesday.available && daysOff.push(2)
+    !shifts.wednesday.available && daysOff.push(3)
+    !shifts.thursday.available && daysOff.push(4)
+    !shifts.friday.available && daysOff.push(5)
+    !shifts.saturday.available && daysOff.push(6)
+    !shifts.sunday.available && daysOff.push(0)
 
     const disableDaysOff = daysOff.includes(current.day())
 
@@ -154,12 +154,13 @@ export const NewAppointment = () => {
 
     if (!selectedMedic) return
 
+    const availableHours: number[] = []
+    const shifts = (JSON.parse(selectedMedic.shifts) as Shifts)
     const day = date
       .format("dddd")
-      .toLowerCase() as keyof typeof selectedMedic.shifts
+      .toLowerCase() as keyof typeof shifts
 
-    const availableHours: number[] = []
-    for (const interval of selectedMedic.shifts[day].shifts) {
+    for (const interval of shifts[day].shifts) {
       for (let i = interval.from; i < interval.to; i++) {
         availableHours.push(i)
       }
@@ -235,7 +236,6 @@ export const NewAppointment = () => {
         time: appointment.time.format("HH:mm")
       }
       const data = await addAppointment(appDto)
-      console.log({ data })
       successNotification("Turno creado correctamente")
       navigate("/turnos")
     } catch (e) {

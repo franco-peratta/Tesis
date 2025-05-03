@@ -9,7 +9,7 @@ export const getAll = async (req: Request, res: Response) => {
 		res.json({ data })
 	} catch (error) {
 		res.status(500).json({ msg: "Error al obterner los admins", error })
-		console.log(error)
+		console.error(error)
 	}
 }
 
@@ -25,7 +25,7 @@ export const getAdminById = async (req: Request, res: Response) => {
 		res.json({ msg: "Admin obtenido con exito", data })
 	} catch (error) {
 		res.json({ msg: "Error al obtener el admin", error })
-		console.log(error)
+		console.error(error)
 	}
 }
 
@@ -96,6 +96,6 @@ export const deleteAdmin = async (req: Request, res: Response) => {
 		res.json({ msg: "Admin eliminado exitosamente", data: admin.id })
 	} catch (error) {
 		res.status(500).json({ msg: "Error, no se pudo eliminar el admin", error })
-		console.log(error)
+		console.error(error)
 	}
 }

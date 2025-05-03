@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer"
 import fs from "fs"
 
-const emailAddress = "franco.peratta20@gmail.com"
+const emailAddress = process.env.EMAIL_ADDRESS
 
 const emailTemplateMapping = {
 	test: "test_template.html",
@@ -16,7 +16,7 @@ const transporter = nodemailer.createTransport({
 	service: "Gmail",
 	auth: {
 		user: emailAddress,
-		pass: "luve wvsv dywa xtox"
+		pass: process.env.EMAIL_PASSWORD
 	}
 })
 
@@ -48,7 +48,7 @@ export function sendEmail(
 
 	transporter.sendMail(mailOptions, (error, info) => {
 		if (error) {
-			console.log("Error sending email: ", error)
+			console.error("Error sending email: ", error)
 		} else {
 			console.log("Email sent: ", info.response)
 		}

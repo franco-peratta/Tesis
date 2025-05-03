@@ -44,7 +44,7 @@ export const Profile = () => {
 
   const setShifts = (shifts: Shifts) => {
     const newProvider: Provider = { ...user }
-    newProvider.shifts = shifts
+    newProvider.shifts = JSON.stringify(shifts)
     setUser(newProvider)
   }
 

@@ -113,7 +113,7 @@ async function seed() {
 
 	const { patient: franco } = await prisma.user.create({
 		data: {
-			email: "franco@mail.com",
+			email: "franco.peratta@hotmail.com",
 			password: await bcrypt.hash("password", 10),
 			role: "patient",
 			patient: {

@@ -23,9 +23,6 @@ export const login = async (req: Request, res: Response) => {
 
 	const user = await getUserByEmail(email)
 
-	console.log(user?.role)
-	console.log(role)
-
 	if (!user || user.role !== role) {
 		return res.status(401).send({ error: "Credenciales Incorrectas" })
 	}
@@ -81,12 +78,10 @@ export const register = async (req: Request, res: Response) => {
 		}
 
 		if (role === "patient") {
-			console.log("Creando paciente user")
 			id = await createPatientUser(req.body as TPatientUser)
 		}
 
 		if (role === "provider") {
-			console.log("Creando paciente user")
 			id = await createProviderUser(req.body as TProviderUser)
 		}
 

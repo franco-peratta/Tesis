@@ -6,7 +6,7 @@ export const getAllAppointments = async () => {
 	return data
 }
 
-export const getById = async (id: number) => {
+export const getById = async (id: string) => {
 	const data = await prisma.appointment.findUnique({
 		include: {
 			patient: true,

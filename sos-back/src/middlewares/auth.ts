@@ -34,8 +34,6 @@ export async function auth(
 			ignoreNotBefore: true
 		}) as JWT
 
-		console.log(decoded.nbf)
-
 		const user = await getUserById(decoded.id)
 
 		if (!user) {
@@ -45,7 +43,7 @@ export async function auth(
 		req.user = user
 		next()
 	} catch (error) {
-		console.log(error)
+		console.error(error)
 		res.status(401).send({ error: "Authentication failed" })
 	}
 }

@@ -1,7 +1,7 @@
 export type Provider = {
   id: number
   name: string
-  shifts: Shifts
+  shifts: string
   email?: string
   phoneNumber: string | null
 }

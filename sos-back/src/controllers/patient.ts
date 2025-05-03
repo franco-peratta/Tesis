@@ -8,7 +8,7 @@ export const getAll = async (_req: Request, res: Response) => {
 		res.json({ data })
 	} catch (error) {
 		res.json({ msg: "Error, no se pudo traer los pacientes", error })
-		console.log(error)
+		console.error(error)
 	}
 }
 
@@ -20,7 +20,7 @@ export const getPatientById = async (req: Request, res: Response) => {
 		res.json({ msg: "Paciente buscado con exito", data })
 	} catch (error) {
 		res.json({ msg: "Error, intente nuevamente", error })
-		console.log(error)
+		console.error(error)
 	}
 }
 
@@ -35,7 +35,7 @@ export const getPatientByIdWithAppointments = async (
 		res.json({ msg: "Paciente buscado con exito", data })
 	} catch (error) {
 		res.json({ msg: "Error, intente nuevamente", error })
-		console.log(error)
+		console.error(error)
 	}
 }
 
@@ -80,7 +80,7 @@ export const updatePatient = async (req: Request, res: Response) => {
 export const updateEmr = async (req: Request, res: Response) => {
 	const patientId = parseInt(req.params.id)
 	const { emr } = req.body
-	console.log(emr)
+	console.error(emr)
 
 	try {
 		const data = await repo.updateEmr(patientId, emr)
@@ -89,7 +89,7 @@ export const updateEmr = async (req: Request, res: Response) => {
 		res
 			.status(500)
 			.json({ msg: "Error inesperado al actualizar el informe.", error })
-		console.log(error)
+		console.error(error)
 	}
 }
 
@@ -102,6 +102,6 @@ export const deletePatient = async (req: Request, res: Response) => {
 		res
 			.status(500)
 			.json({ msg: "Error inesperado al eliminar el paciente", error })
-		console.log(error)
+		console.error(error)
 	}
 }

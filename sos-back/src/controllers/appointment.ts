@@ -15,18 +15,18 @@ export const getAll = async (req: Request, res: Response) => {
 		res.json({ data })
 	} catch (error) {
 		res.json({ msg: "Error, no se pudo obtener los turnos", error })
-		console.log(error)
+		console.error(error)
 	}
 }
 
 export const getAppointmentById = async (req: Request, res: Response) => {
-	const appointmentId = parseInt(req.params.id)
+	const appointmentId = req.params.id
 	try {
 		const data = await getById(appointmentId)
 		res.json({ msg: "Turno obtenido con exito", data })
 	} catch (error) {
 		res.json({ msg: "Error, no se pudo obtener el turno", error })
-		console.log(error)
+		console.error(error)
 	}
 }
 
@@ -40,7 +40,7 @@ export const getAppointmentsByPatientId = async (
 		res.json({ msg: "Turno obtenido con exito", data })
 	} catch (error) {
 		res.json({ msg: "Error, no se pudo obtener el turno", error })
-		console.log(error)
+		console.error(error)
 	}
 }
 
@@ -54,14 +54,14 @@ export const getAppointmentsByProviderId = async (
 		res.json({ msg: "Turno obtenido con exito", data })
 	} catch (error) {
 		res.json({ msg: "Error, no se pudo obtener el turno", error })
-		console.log(error)
+		console.error(error)
 	}
 }
 
 export const addAppointment = async (req: Request, res: Response) => {
 	const appointment = req.body
 	try {
-		const data = await prisma.appointment.create({
+		const new_appointment = await prisma.appointment.create({
 			data: {
 				date: appointment.date,
 				time: appointment.time,
@@ -79,17 +79,17 @@ export const addAppointment = async (req: Request, res: Response) => {
 			}
 		})
 
-		sendAppointmentCreationEmail(appointment)
+		sendAppointmentCreationEmail(new_appointment)
 
-		res.json({ msg: "Turno agregado con éxito", data })
+		res.json({ msg: "Turno agregado con éxito", new_appointment })
 	} catch (error) {
 		res.status(500).json({ msg: "Error, no se pudo agregar el turno", error })
-		console.log(error)
+		console.error(error)
 	}
 }
 
 export const updateAppointment = async (req: Request, res: Response) => {
-	const appointmentId = parseInt(req.params.id)
+	const appointmentId = req.params.id
 	const updatedAppointment = req.body
 	try {
 		const data = await prisma.appointment.update({
@@ -109,12 +109,12 @@ export const updateAppointment = async (req: Request, res: Response) => {
 		res
 			.status(500)
 			.json({ msg: "Error, no se pudo actualizar el turno", error })
-		console.log(error)
+		console.error(error)
 	}
 }
 
 export const updateAppointmentStatus = async (req: Request, res: Response) => {
-	const appointmentId = parseInt(req.params.id)
+	const appointmentId = req.params.id
 	const { status } = req.body
 	try {
 		const data = await prisma.appointment.update({
@@ -130,12 +130,12 @@ export const updateAppointmentStatus = async (req: Request, res: Response) => {
 		res
 			.status(500)
 			.json({ msg: "Error, no se pudo actualizar el estado del turno", error })
-		console.log(error)
+		console.error(error)
 	}
 }
 
 export const deleteAppointment = async (req: Request, res: Response) => {
-	const appointmentId = parseInt(req.params.id)
+	const appointmentId = req.params.id
 	try {
 		const appointment = await prisma.appointment.delete({
 			where: {
@@ -145,7 +145,7 @@ export const deleteAppointment = async (req: Request, res: Response) => {
 		res.json({ msg: "Turno eliminado con éxito", data: appointment.id })
 	} catch (error) {
 		res.status(500).json({ msg: "Error, no se pudo eliminar el turno", error })
-		console.log(error)
+		console.error(error)
 	}
 }
 
@@ -173,8 +173,6 @@ export const getOccupiedSlots = async (req: Request, res: Response) => {
 
 		const occupiedSlots = calculateSlots(provider, date)
 
-		console.log({ occupiedSlots })
-
 		res.json({
 			msg: "Turnos ocupados recuperados con éxito",
 			data: occupiedSlots
@@ -184,7 +182,7 @@ export const getOccupiedSlots = async (req: Request, res: Response) => {
 			msg: "Error, no se pudieron recuperar los turnos ocupados",
 			error
 		})
-		console.log(error)
+		console.error(error)
 	}
 }
 
@@ -325,7 +323,7 @@ const sendAppointmentCreationEmail = async (appointment: Appointment) => {
 			name: true
 		}
 	})
-
+	console.error("ESTOY POR MANDAR EL MAIL")
 	if (patient && patient.user?.email) {
 		sendEmail(
 			patient.user?.email,
@@ -334,7 +332,8 @@ const sendAppointmentCreationEmail = async (appointment: Appointment) => {
 			{
 				nombre: patient.name,
 				medico: provider?.name || "Desconocido",
-				fecha: appointment.date
+				fecha: appointment.date,
+				appointment_id: appointment.id
 			}
 		)
 	} else {

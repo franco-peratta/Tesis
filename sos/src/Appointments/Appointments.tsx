@@ -41,8 +41,6 @@ export const Appointments = () => {
 
   const deleteHandler = async (appointment: Appointment) => {
     if (!appointment) return
-
-    console.log("appointment", appointment)
     try {
       await deleteAppointment(appointment.id)
       setAppointments((prev) =>

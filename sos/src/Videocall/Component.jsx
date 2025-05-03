@@ -16,7 +16,6 @@ export const Videocall = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState()
   const [appointment, setAppointment] = useState()
-  const [collapsed, setCollapsed] = useState(false)
 
   useEffect(() => {
     document.getElementById("main").style.paddingLeft = 0
@@ -65,7 +64,7 @@ export const Videocall = () => {
   // displayName no estaria funcionando
   // password funciona para el paciente SOLO si el medico se metio antes
   const { roomName, displayName, password } = {
-    roomName: window.btoa(`appointment=${appointment.id}`),
+    roomName: appointment.id,
     displayName: `Turno con ${appointment.patient.name}`,
     password: appointment.patient.dni
   }
@@ -74,7 +73,7 @@ export const Videocall = () => {
     <div
       className="videocall-container"
       style={{
-        gridTemplateColumns: `${collapsed ? "98.5%" : "75%"} auto`
+        gridTemplateColumns: `75% auto`
       }}
     >
       <Jitsi
@@ -90,8 +89,6 @@ export const Videocall = () => {
       <RightPanel
         patientInfo={appointment.patient}
         setPatientInfo={setPatientInfo}
-        collapsed={collapsed}
-        setCollapsed={setCollapsed}
       />
     </div>
   )

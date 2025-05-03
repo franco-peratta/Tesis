@@ -1,1 +1,1 @@
-export { EMR } from "./EMR"
+export { EmrComponent as EMR } from "./EmrComponent"

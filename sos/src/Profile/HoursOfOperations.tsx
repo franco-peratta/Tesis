@@ -11,7 +11,7 @@ import {
 import moment from "moment"
 import type { Moment } from "moment"
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons"
-import { Provider } from "./Model"
+import { Provider, Shifts } from "./Model"
 
 const { Title } = Typography
 
@@ -29,33 +29,38 @@ type Props = {
   setShifts: Function
 }
 export const HoursOfOperations = ({ user, setShifts }: Props) => {
+
+  const user_shifts = JSON.parse(user.shifts) as Shifts
+
   const onChange = (value: any, day: Day, index: number) => {
     const a: Moment = value[0]
     const b: Moment = value[1]
-    const newShifts = { ...user.shifts }
+    const newShifts = { ...user_shifts }
     newShifts[day].shifts[index].from = a.hour()
     newShifts[day].shifts[index].to = b.hour()
     setShifts(newShifts)
   }
 
   const onChecked = (day: Day) => {
-    const newShifts = { ...user.shifts }
+    const newShifts = { ...user_shifts }
     newShifts[day].available = !newShifts[day].available
     setShifts(newShifts)
   }
 
   const addShift = (day: Day) => {
-    if (user.shifts[day].shifts.length > 3) return
-    const newShifts = { ...user.shifts }
+    if (user_shifts[day].shifts.length > 3) return
+    const newShifts = { ...user_shifts }
     newShifts[day].shifts.push({ from: 0, to: 0 })
     setShifts(newShifts)
   }
 
   const deleteShift = (day: Day) => {
-    const newShifts = { ...user.shifts }
+    const newShifts = { ...user_shifts }
     newShifts[day].shifts.pop()
     setShifts(newShifts)
   }
+
+
 
   return (
     <>
@@ -65,7 +70,7 @@ export const HoursOfOperations = ({ user, setShifts }: Props) => {
           <Row style={{ marginBottom: "1em" }}>
             <Col span={3}>
               <Checkbox
-                defaultChecked={user.shifts[day.key].available}
+                defaultChecked={user_shifts[day.key].available}
                 onChange={() => onChecked(day.key)}
               >
                 <Title level={4}>{day.label}</Title>
@@ -73,7 +78,7 @@ export const HoursOfOperations = ({ user, setShifts }: Props) => {
             </Col>
             <Col span={6}>
               <Space direction="vertical">
-                {user.shifts[day.key].shifts.map((slot, i) => (
+                {user_shifts[day.key].shifts.map((slot, i) => (
                   <div key={`${day.key}-slot-${i}`}>
                     <TimePicker.RangePicker
                       format="HH"
@@ -81,12 +86,12 @@ export const HoursOfOperations = ({ user, setShifts }: Props) => {
                         moment(slot.from, "HH"),
                         moment(slot.to, "HH")
                       ]}
-                      disabled={!user.shifts[day.key].available}
+                      disabled={!user_shifts[day.key].available}
                       onChange={(e) => onChange(e, day.key, i)}
                     />
                   </div>
                 ))}
-                {user.shifts[day.key].shifts.length === 0 && (
+                {user_shifts[day.key].shifts.length === 0 && (
                   <div>Sin horarios</div>
                 )}
               </Space>
@@ -95,15 +100,15 @@ export const HoursOfOperations = ({ user, setShifts }: Props) => {
               <Button
                 type="text"
                 onClick={() => addShift(day.key)}
-                disabled={!user.shifts[day.key].available}
+                disabled={!user_shifts[day.key].available}
               >
                 <PlusOutlined />
               </Button>
-              {user.shifts[day.key].shifts.length > 1 ? (
+              {user_shifts[day.key].shifts.length > 1 ? (
                 <Button
                   type="text"
                   onClick={() => deleteShift(day.key)}
-                  disabled={!user.shifts[day.key].available}
+                  disabled={!user_shifts[day.key].available}
                 >
                   <DeleteOutlined />
                 </Button>

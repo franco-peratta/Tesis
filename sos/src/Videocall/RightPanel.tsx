@@ -11,6 +11,8 @@ import { EmrType } from "../EMR/model"
 import { RichTextEditor } from "../UI/RichTextEditor"
 import { Patient } from "../Patient/model"
 import { useNavigate } from "react-router-dom"
+import { EMR } from "../EMR"
+import { errorNotification, successNotification } from "../Notification"
 
 const { Title, Text, Link } = Typography
 
@@ -51,86 +53,73 @@ type Props = {
 export const RightPanel = ({
   patientInfo,
   setPatientInfo,
-  collapsed,
-  setCollapsed
 }: Props) => {
   const [visible, setVisible] = useState(false)
   const navigate = useNavigate()
 
-  const onOk = (emr: EmrType) => {
-    setVisible(false)
-    const newPatientInfo = { ...patientInfo, emr }
-    updateEMR(patientInfo.id, emr).then((res) => {
-      setPatientInfo(newPatientInfo)
-    })
-  }
-
-  const onCancel = () => {
+  const close = () => {
     setVisible(false)
   }
 
   return (
     <>
       <div className="right-panel">
-        {collapsed ? (
-          <div className="collapse-container">
-            <button
-              className="collapse-button"
-              onClick={() => setCollapsed(false)}
-            >
-              <LeftOutlined />
-            </button>
+        <div className="details">
+          <div className="">
+            <Space direction="vertical">
+              <Title className="title">{patientInfo.name}</Title>
+              <Text type="secondary">{patientInfo.email}</Text>
+              <Text className="dob">
+                Fecha de nacimiento: {patientInfo.dob} -{" "}
+                {calculateAge(patientInfo.dob)} años
+              </Text>
+            </Space>
+            <Divider />
           </div>
-        ) : (
-          <button
-            className="collapse-button"
-            onClick={() => setCollapsed(true)}
-          >
-            <RightOutlined />
-          </button>
-        )}
-        {!collapsed && (
-          <div className="details">
-            <div className="">
-              <Space direction="vertical">
-                <Title className="title">{patientInfo.name}</Title>
-                <Text type="secondary">{patientInfo.email}</Text>
-                <Text className="dob">
-                  Fecha de nacimiento: {patientInfo.dob} -{" "}
-                  {calculateAge(patientInfo.dob)} años
-                </Text>
-              </Space>
-              <Divider />
-              <div>
-                <Button
-                  type="link"
-                  size="large"
-                  onClick={() => {
-                    setVisible(true)
-                  }}
-                >
-                  <Link strong>Historia Clinica</Link>
-                  <FileTextOutlined style={{ marginLeft: ".5em" }} />
-                </Button>
-              </div>
-            </div>
-            <div>
+          <div style={{ display: "flex", flexDirection: "column", height: "75vh" }}>
+            <Space direction="vertical" style={{ width: "100%", flexGrow: 1 }}>
+              <Button
+                type="default"
+                size="large"
+                block
+                onClick={() => setVisible(true)}
+              >
+                <FileTextOutlined style={{}} />
+                <>Historia Clinica</>
+              </Button>
+
+              <Button
+                type="primary"
+                size="large"
+                block
+                onClick={() => console.log("Crear turno")}
+              >
+                <FileTextOutlined style={{}} />
+                Crear turno
+
+              </Button>
+            </Space>
+
+            <div style={{ marginTop: "auto", width: "100%" }}>
               <Button
                 type="primary"
                 danger
+                block
+                size="large"
+                style={{ height: "60px" }}
                 onClick={() => navigate(`/pacientes/${patientInfo.id}`)}
               >
-                END CALL
+                Finalizar Llamada
               </Button>
             </div>
           </div>
-        )}
+        </div>
       </div>
       <EmrModal
         visible={visible}
-        data={patientInfo.emr}
-        onOk={onOk}
-        onCancel={onCancel}
+        patient={patientInfo}
+        onOk={close}
+        onCancel={close}
       />
     </>
   )
@@ -138,12 +127,25 @@ export const RightPanel = ({
 
 type ModalProps = {
   visible: boolean
-  data?: EmrType
-  onOk: (emr: string) => void
+  patient: Patient
+  onOk: () => void
   onCancel: () => void
 }
-const EmrModal = ({ visible, data, onOk, onCancel }: ModalProps) => {
-  const [value, setValue] = useState(data ? data : "")
+const EmrModal = ({ visible, patient, onOk, onCancel }: ModalProps) => {
+
+  const [emr, setEmrValue] = useState(patient.emr)
+
+  const changeEmr = (emr: string) => {
+    updateEMR(patient.id, emr)
+      .then((res) => {
+        const newEmr = res.data.emr
+        successNotification("Historia clinica actualizada con exito")
+      })
+      .catch((e) => {
+        errorNotification("Error al actualizar la historia clinica")
+        console.error(e)
+      })
+  }
 
   const ModalTitle = () => (
     <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -156,14 +158,17 @@ const EmrModal = ({ visible, data, onOk, onCancel }: ModalProps) => {
   return (
     <Modal
       title={<ModalTitle />}
-      visible={visible}
+      open={visible}
       onOk={() => {
-        onOk(value)
+        onOk()
       }}
       onCancel={onCancel}
-      width="50%"
+      width="75%"
     >
-      <RichTextEditor value={value} onChange={setValue} />
+      <EMR
+        initialMarkdown={emr}
+        onSave={(markdown: string) => changeEmr(markdown)}
+      />
     </Modal>
   )
 }
