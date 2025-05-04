@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import { Button, Card, Popconfirm, Space, Tabs, Tag, Typography } from "antd"
+import { Button, Card, Popconfirm, Space, Tabs, Tag, Typography, Checkbox, Empty } from "antd"
 import {
   CloseOutlined,
   DeleteOutlined,
@@ -94,6 +94,9 @@ export const PatientDetails = () => {
   )
 }
 
+const statusOptions = ["espera", "en_progreso", "terminado"] as const
+type StatusType = typeof statusOptions[number]
+
 const Details = ({
   patient,
   setPatient
@@ -102,6 +105,18 @@ const Details = ({
   setPatient: Dispatch<SetStateAction<PatientWithAppointments | undefined>>
 }) => {
   const navigate = useNavigate()
+  const [selectedStatuses, setSelectedStatuses] = useState<StatusType[]>([
+    "espera",
+    "en_progreso"
+  ])
+
+  const toggleStatus = (status: StatusType) => {
+    setSelectedStatuses((prev) =>
+      prev.includes(status)
+        ? prev.filter((s) => s !== status)
+        : [...prev, status]
+    )
+  }
 
   const deleteHandler = async (appointment: any) => {
     const { id } = appointment
@@ -119,51 +134,51 @@ const Details = ({
     }
   }
 
+  const appointmentsToShow = patient.Appointment?.filter((app) =>
+    selectedStatuses.includes(app.status as StatusType)
+  ) ?? []
+
   return (
     <>
-      <div
-        className="flex--columns"
-        style={{ fontSize: "1.5em", gap: "0.5em" }}
-      >
-        <Text>
-          <strong>Email:</strong> {patient.email}
-        </Text>
-        <Text>
-          <strong>DNI:</strong> {patient.dni}
-        </Text>
-        <Text>
-          <strong>Fecha de nacimiento:</strong> {patient.dob}
-        </Text>
+      <div className="flex--space-between">
+        <Title>Turnos</Title>
+        <Button
+          onClick={() => navigate(`/turnos/nuevo?patient=${patient.id}`)}
+          type="default"
+          size="large"
+        >
+          <Space direction="horizontal">
+            <PlusOutlined />
+            Crear turno
+          </Space>
+        </Button>
       </div>
-      <br />
-      <div>
-        <div className="flex--space-between">
-          <Title>Turnos proximos</Title>
+
+      {/* Filters */}
+      <div style={{ margin: "1em 0", display: "flex", gap: "0.5em" }}>
+        {statusOptions.map((status) => (
           <Button
-            onClick={() => navigate(`/turnos/nuevo?patient=${patient.id}`)}
-            type="default"
-            size="large"
+            key={status}
+            type={selectedStatuses.includes(status) ? "primary" : "default"}
+            onClick={() => toggleStatus(status)}
           >
-            <Space direction="horizontal">
-              <PlusOutlined />
-              Crear turno
-            </Space>
+            {status.split("_").join(" ").toLocaleUpperCase()}
           </Button>
-        </div>
-        <Title level={3}>Turnos</Title>
-        <div className="row">
-          {patient.Appointment?.map((app) => {
+        ))}
+      </div>
+
+      {/* Appointments */}
+      <div className="row" style={{ display: "flex", gap: "1em", flexWrap: "wrap" }}>
+        {appointmentsToShow.length > 0 ? (
+          appointmentsToShow.map((app) => {
             const Description = () => (
               <div>
-                <Tag
-                  style={{ fontSize: "1em" }}
-                  color={statusColorMapping[app.status]}
-                >
-                  {app.status.toUpperCase()}
+                <Tag style={{ fontSize: "1em" }} color={statusColorMapping[app.status]}>
+                  {app.status.split("_").join(" ").toLocaleUpperCase()}
                 </Tag>
                 <br />
                 <br />
-                Dr/a: {`${app.provider?.name}`}
+                Dr/a: {app.provider?.name}
               </div>
             )
 
@@ -171,9 +186,7 @@ const Details = ({
               <Popconfirm
                 placement="top"
                 title={"Está seguro que desea borrar este turno?"}
-                onConfirm={() =>
-                  deleteHandler({ ...app, patientId: patient.id })
-                }
+                onConfirm={() => deleteHandler({ ...app, patientId: patient.id })}
                 okText="Si"
                 cancelText="No"
               >
@@ -193,40 +206,44 @@ const Details = ({
                 okText="Si"
                 cancelText="No"
               >
-                <CheckOutlined
-                  key="check"
-                  disabled={app.status === "terminado"}
-                />
+                <CheckOutlined key="check" disabled={app.status === "terminado"} />
               </Popconfirm>,
               <Popconfirm
                 placement="top"
                 title={"Iniciar llamada?"}
                 onConfirm={() => {
-                  navigate("/videocall/" + app.id)
+                  changeAppointmentStatusById(app.id, "en_progreso")
+                    .then(() => navigate(`/videocall/${app.id}`))
+                    .catch((e) => { errorNotification("Error al crear la llamada"); console.error(e) })
+
                 }}
                 okText="Si"
                 cancelText="No"
               >
-                <PhoneOutlined
-                  key="call"
-                  disabled={app.status === "terminado"}
-                />
+                <PhoneOutlined key="call" disabled={app.status === "terminado"} />
               </Popconfirm>
             ]
 
             return (
-              <Card key={`${app.id}`} style={{ width: 300 }} actions={actions}>
+              <Card key={app.id} style={{ width: 300 }} actions={actions}>
                 <Meta
                   title={`${app.date.split("T")[0]} ${app.time}`}
                   description={<Description />}
                 />
               </Card>
             )
-          })}
-          {!patient.Appointment?.length ? (
-            <Text>El paciente no tiene turnos</Text>
-          ) : null}
-        </div>
+          })
+        ) : (
+          <div style={{
+            width: '100%',
+            height: '300px', // or any height you want, e.g. '100vh' for full screen
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            <Empty description={<Text>El paciente no tiene turnos para los filtros seleccionados</Text>} />
+          </div>
+        )}
       </div>
     </>
   )

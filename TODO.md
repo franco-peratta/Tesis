@@ -1,6 +1,5 @@
 # TODO
 
-- Agregar el componente de solicitar turno al perfil del paciente en provider app
 - Agregar el componente de solicitar turno a la app del paciente
 - Hacer mobile friendly la app del paciente
 - Reset password

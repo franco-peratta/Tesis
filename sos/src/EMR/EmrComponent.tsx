@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Space } from 'antd';
-import { SaveOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
+import { SaveOutlined, EditOutlined } from "@ant-design/icons";
 import MarkdownEditor from 'react-markdown-editor-lite';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -73,10 +73,9 @@ const clinicalRecordTemplate = `
 interface EMRProps {
     initialMarkdown: string;
     onSave: (markdown: string) => void;
-    isEditing?: boolean;
 }
 
-export const EmrComponent: React.FC<EMRProps> = ({ initialMarkdown, isEditing = true, onSave }) => {
+export const EmrComponent: React.FC<EMRProps> = ({ initialMarkdown, onSave }) => {
     const [markdown, setMarkdown] = useState(initialMarkdown);
     const [viewMode, setViewMode] = useState<'preview' | 'edit'>('preview');
 
@@ -92,21 +91,34 @@ export const EmrComponent: React.FC<EMRProps> = ({ initialMarkdown, isEditing = 
 
     return (
         <div className="p-4 border rounded shadow bg-white">
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1em' }}>
+                <Button
+                    icon={viewMode === 'edit' ? <EditOutlined /> : <EditOutlined rotate={90} />}
+                    onClick={() => setViewMode(viewMode === 'edit' ? 'preview' : 'edit')}
+                >
+                    {viewMode === 'edit' ? 'Vista previa' : 'Editar'}
+                </Button>
+            </div>
             <MarkdownEditor
+                key={viewMode} // <-- this forces re-mount when viewMode changes
                 value={markdown}
                 style={{ height: '60vh' }}
                 onChange={handleEditorChange}
-                renderHTML={(text) => <ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown>}
+                renderHTML={(text) => (
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown>
+                )}
                 view={getEditorView()}
             />
+
             <Button
                 onClick={() => {
-                    setMarkdown(markdown.length === 0 ? clinicalRecordTemplate : markdown)
-                    onSave(markdown.length === 0 ? clinicalRecordTemplate : markdown);
+                    const newMarkdown = markdown.length === 0 ? clinicalRecordTemplate : markdown;
+                    setMarkdown(newMarkdown);
+                    onSave(newMarkdown);
                 }}
                 type="primary"
                 size="large"
-                style={{ marginTop: "2em" }}
+                style={{ marginTop: '2em' }}
             >
                 <Space direction="horizontal">
                     <SaveOutlined />
@@ -115,4 +127,5 @@ export const EmrComponent: React.FC<EMRProps> = ({ initialMarkdown, isEditing = 
             </Button>
         </div>
     );
+
 };

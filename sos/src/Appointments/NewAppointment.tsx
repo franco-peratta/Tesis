@@ -224,7 +224,7 @@ export const NewAppointment = () => {
 
   const submit = async () => {
     setIsLoading(true)
-    const patientId = idForm.getFieldsValue().patient
+    const patientId = parseInt(idForm.getFieldsValue().patient)
     const {
       medic: providerId,
       date,

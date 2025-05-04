@@ -74,91 +74,103 @@ export const Appointments = () => {
       {loading ? (
         <Loader />
       ) : appointments?.length ? (
-        appointments.map((app) => (
-          <Row key={app.id}>
-            <Col style={{ width: "100%", marginBottom: "1em" }}>
-              <Card
-                style={{
-                  borderColor: "#ddd",
-                  boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px"
-                }}
-                actions={[
-                  <Popconfirm
-                    placement="top"
-                    title={"Está seguro que desea borrar este turno?"}
-                    onConfirm={() => deleteHandler(app)}
-                    okText="Si"
-                    cancelText="No"
-                  >
-                    <Space
-                      style={{ fontSize: "1.5em", color: "black" }}
-                      size="middle"
-                      direction="horizontal"
-                    >
-                      Borrar
-                      <DeleteOutlined key="delete" />
-                    </Space>
-                  </Popconfirm>,
-                  <Popconfirm
-                    placement="top"
-                    title={"Está seguro que desea realizar esta llamada?"}
-                    onConfirm={() => {
-                      infoNotification("Creando llamada")
-                      changeAppointmentStatusById(app.id, "en_progreso")
-                        .then(() => navigate(`/videocall/${app.id}`))
-                        .catch(() => console.log("@TODO catchear el error"))
+        // Group appointments in chunks of 2
+        appointments.reduce((rows: JSX.Element[], _, index) => {
+          if (index % 2 !== 0) return rows
+
+          const chunk = appointments.slice(index, index + 2)
+
+          rows.push(
+            <Row gutter={[16, 16]} style={{ marginBottom: "16px" }} key={index}>
+              {chunk.map((app) => (
+                <Col span={12} key={app.id}>
+                  <Card
+                    style={{
+                      borderColor: "#ddd",
+                      boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px"
                     }}
-                    okText="Si"
-                    cancelText="No"
-                    disabled={app.status === "terminado"}
+                    actions={[
+                      <Popconfirm
+                        placement="top"
+                        title={"Está seguro que desea borrar este turno?"}
+                        onConfirm={() => deleteHandler(app)}
+                        okText="Si"
+                        cancelText="No"
+                      >
+                        <Space
+                          style={{ fontSize: "1.5em", color: "black" }}
+                          size="middle"
+                          direction="horizontal"
+                        >
+                          Borrar
+                          <DeleteOutlined key="delete" />
+                        </Space>
+                      </Popconfirm>,
+                      <Popconfirm
+                        placement="top"
+                        title={"Está seguro que desea realizar esta llamada?"}
+                        onConfirm={() => {
+                          infoNotification("Creando llamada")
+                          changeAppointmentStatusById(app.id, "en_progreso")
+                            .then(() => navigate(`/videocall/${app.id}`))
+                            .catch(() => console.log("@TODO catchear el error"))
+                        }}
+                        okText="Si"
+                        cancelText="No"
+                        disabled={app.status === "terminado"}
+                      >
+                        <Space
+                          style={{ fontSize: "1.5em", color: "green" }}
+                          size="middle"
+                          direction="horizontal"
+                        >
+                          Iniciar llamada
+                          <PhoneOutlined key="call" />
+                        </Space>
+                      </Popconfirm>
+                    ]}
                   >
-                    <Space
-                      style={{ fontSize: "1.5em", color: "green" }}
-                      size="middle"
-                      direction="horizontal"
-                    >
-                      Iniciar llamada
-                      <PhoneOutlined key="call" />
-                    </Space>
-                  </Popconfirm>
-                ]}
-              >
-                <div className="flex--space-between ">
-                  <Meta
-                    title={
-                      <Link to={`/pacientes/${app.patient?.id}`}>
-                        {app.patient?.name}
-                      </Link>
-                    }
-                    description={
-                      <div>
-                        <Text>{app.patient?.phoneNumber}</Text>
-                        <Text>{app.patient?.email}</Text>
+                    <div className="flex--space-between">
+                      <Meta
+                        title={
+                          <Link to={`/pacientes/${app.patient?.id}`}>
+                            {app.patient?.name}
+                          </Link>
+                        }
+                        description={
+                          <div>
+                            <Text>{app.patient?.phoneNumber}</Text>
+                            <Text>{app.patient?.email}</Text>
+                          </div>
+                        }
+                      />
+                      <div className="flex--space-between">
+                        <Tag style={{ fontSize: "1.2em" }} color="red">
+                          {app.provider?.name}
+                        </Tag>
                       </div>
-                    }
-                  />
-                  <div className="flex--space-between">
-                    <Tag style={{ fontSize: "1.2em" }} color="red">
-                      {app.provider?.name}
-                    </Tag>
-                  </div>
-                  <Tag style={{ fontSize: "1.2em" }} color="blue">
-                    {`${moment(app.date).format("DD/MM/YYYY")} ${app.time}`}
-                  </Tag>
-                  <Tag
-                    style={{ fontSize: "1em" }}
-                    color={statusColorMapping[app.status]}
-                  >
-                    {app.status.toUpperCase()}
-                  </Tag>
-                </div>
-              </Card>
-            </Col>
-          </Row>
-        ))
+                      <Tag style={{ fontSize: "1.2em" }} color="blue">
+                        {`${moment(app.date).format("DD/MM/YYYY")} ${app.time}`}
+                      </Tag>
+                      <Tag
+                        style={{ fontSize: "1em" }}
+                        color={statusColorMapping[app.status]}
+                      >
+                        {app.status.toUpperCase()}
+                      </Tag>
+                    </div>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          )
+
+          return rows
+        }, [])
       ) : (
         <Text>No hay turnos</Text>
       )}
+
     </Bubble>
   )
 }

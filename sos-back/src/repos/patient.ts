@@ -41,14 +41,17 @@ export const getPatientByIdWithAppointments = async (id: number) => {
 		},
 		include: {
 			Appointment: {
-				include: { provider: true }
+				include: { provider: true },
+				orderBy: {
+					date: 'asc',
+				},
 			},
 			user: {
 				select: {
 					email: true
 				}
 			}
-		}
+		},
 	})
 	return { ...patient, email: patient.user.email }
 }
