@@ -33,6 +33,7 @@ export const HoursOfOperations = ({ user, setShifts }: Props) => {
   const user_shifts = JSON.parse(user.shifts) as Shifts
 
   const onChange = (value: any, day: Day, index: number) => {
+    if (!value) return;
     const a: Moment = value[0]
     const b: Moment = value[1]
     const newShifts = { ...user_shifts }
@@ -60,11 +61,9 @@ export const HoursOfOperations = ({ user, setShifts }: Props) => {
     setShifts(newShifts)
   }
 
-
-
   return (
     <>
-      <Title>Horas disponbles</Title>
+      <Title>Horario</Title>
       {days.map((day) => (
         <div key={`key-${day.key}`}>
           <Row style={{ marginBottom: "1em" }}>

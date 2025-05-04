@@ -56,7 +56,10 @@ export const NewAppointment = () => {
 
         // Check if the query param 'patient' exists and set the value in the form
         if (patientId && patients?.length) {
-          const selected_patient = patients.find(p => p.id = patientId)
+          const selected_patient = patients.find(p => {
+            return p.id === parseInt(patientId)
+          })
+          console.log({ patientId })
           selected_patient && idForm.setFieldsValue({
             patient: selected_patient.id,
           })
@@ -169,6 +172,7 @@ export const NewAppointment = () => {
     const availableHours: number[] = []
     const shifts = (JSON.parse(selectedMedic.shifts) as Shifts)
     const day = date
+      .locale('en')
       .format("dddd")
       .toLowerCase() as keyof typeof shifts
 

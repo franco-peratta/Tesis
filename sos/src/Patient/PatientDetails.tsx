@@ -1,12 +1,16 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import { Button, Card, Popconfirm, Space, Tabs, Tag, Typography, Checkbox, Empty } from "antd"
+import moment from "moment"
+import { Button, Card, Popconfirm, Space, Tabs, Tag, Typography, Empty, Divider } from "antd"
 import {
   CloseOutlined,
   DeleteOutlined,
   PhoneOutlined,
   CheckOutlined,
-  PlusOutlined
+  PlusOutlined,
+  CalendarOutlined,
+  IdcardOutlined,
+  MailOutlined
 } from "@ant-design/icons"
 import { PatientWithAppointments } from "./model"
 import { statusColorMapping } from "../Appointments/model"
@@ -140,6 +144,30 @@ const Details = ({
 
   return (
     <>
+      <div
+        className="flex flex-col gap-2 mb-8"
+        style={{ fontSize: "1.5em" }}
+      >
+        <div className="flex items-center gap-2">
+          <MailOutlined style={{ marginRight: "0.5em" }} />
+          <Text>
+            <strong>Email:</strong> {patient.email}
+          </Text>
+        </div>
+        <div className="flex items-center gap-2">
+          <IdcardOutlined style={{ marginRight: "0.5em" }} />
+          <Text>
+            <strong>DNI:</strong> {patient.dni}
+          </Text>
+        </div>
+        <div className="flex items-center gap-2">
+          <CalendarOutlined style={{ marginRight: "0.5em" }} />
+          <Text>
+            <strong>Fecha de nacimiento:</strong> {moment(patient.dob).locale('es').format('LL')}
+          </Text>
+        </div>
+      </div>
+      <Divider style={{ margin: '2em 0' }} />
       <div className="flex--space-between">
         <Title>Turnos</Title>
         <Button

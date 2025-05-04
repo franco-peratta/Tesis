@@ -10,6 +10,9 @@ export const getAllPatients = async () => {
 					email: true
 				}
 			}
+		},
+		orderBy: {
+			name: "asc"
 		}
 	})
 	return data.map((patient) => ({

@@ -16,26 +16,34 @@ export const Profile = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
 
+  const fetchUser = () => {
+    if (!id) return
+
+    setLoading(true)
+    setError(false)
+
+    getUserProfileById(id)
+      .then(({ data }) => {
+        setUser(data)
+      })
+      .catch(() => {
+        setError(true)
+      })
+      .finally(() => setLoading(false))
+  }
+
   useEffect(() => {
-    id &&
-      getUserProfileById(id)
-        .then(({ data }) => {
-          setUser(data)
-        })
-        .catch(() => {
-          setError(true)
-        })
-        .finally(() => setLoading(false))
+    fetchUser()
   }, [id])
 
   if (loading || !user) return <Loader />
-  if (error) return <NotFoundPage />
-  if (!id) return <NotFoundPage />
+  if (error || !id) return <NotFoundPage />
 
   const handleSave = () => {
     updateUserProfile(id, user)
       .then(() => {
         successNotification("El perfil se guardó correctamente")
+        fetchUser() // re-fetch the updated profile
       })
       .catch(() => {
         errorNotification("Hubo un error al guardar el perfil")

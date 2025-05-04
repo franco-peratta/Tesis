@@ -9,10 +9,13 @@ import {
   Row,
   Tag,
   Col,
-  Popconfirm
+  Popconfirm,
+  DatePicker,
+  Empty
 } from "antd"
-import { PlusOutlined, PhoneOutlined, DeleteOutlined } from "@ant-design/icons"
-import moment from "moment"
+import { PlusOutlined, PhoneOutlined, DeleteOutlined, IdcardOutlined, CalendarOutlined, FilterOutlined } from "@ant-design/icons"
+import moment, { Moment } from "moment"
+import "moment/locale/es"; // Import Spanish locale
 import { Bubble } from "../components/Bubble"
 import {
   changeAppointmentStatusById,
@@ -33,6 +36,8 @@ export const Appointments = () => {
 
   const [loading, setLoading] = useState(true)
   const [appointments, setAppointments] = useState<Appointment[]>()
+  const [fromDate, setFromDate] = useState<Moment | null>(null)
+  const [toDate, setToDate] = useState<Moment | null>(null)
 
   useEffect(() => {
     getUpcomingAppointmentsByProviderId(user.id)
@@ -55,10 +60,17 @@ export const Appointments = () => {
   if (loading) return <Loader />
   if (!appointments) return <Loader />
 
+  const filteredAppointments = appointments.filter((app) => {
+    const appDate = moment(app.date)
+    if (fromDate && appDate.isBefore(fromDate, "day")) return false
+    if (toDate && appDate.isAfter(toDate, "day")) return false
+    return true
+  })
+
   return (
     <Bubble>
       <div className="flex--space-between">
-        <Title>Turnos proximos</Title>
+        <Title>Turnos próximos</Title>
         <Button
           onClick={() => navigate("/turnos/nuevo")}
           type="default"
@@ -71,14 +83,25 @@ export const Appointments = () => {
         </Button>
       </div>
 
-      {loading ? (
-        <Loader />
-      ) : appointments?.length ? (
-        // Group appointments in chunks of 2
-        appointments.reduce((rows: JSX.Element[], _, index) => {
+      <Space style={{ marginBottom: 16 }}>
+        <FilterOutlined style={{ marginRight: 4 }} />
+        <DatePicker
+          placeholder="Desde"
+          value={fromDate}
+          onChange={(date) => setFromDate(date)}
+        />
+        <DatePicker
+          placeholder="Hasta"
+          value={toDate}
+          onChange={(date) => setToDate(date)}
+        />
+      </Space>
+
+      {filteredAppointments.length ? (
+        filteredAppointments.reduce((rows: JSX.Element[], _, index) => {
           if (index % 2 !== 0) return rows
 
-          const chunk = appointments.slice(index, index + 2)
+          const chunk = filteredAppointments.slice(index, index + 2)
 
           rows.push(
             <Row gutter={[16, 16]} style={{ marginBottom: "16px" }} key={index}>
@@ -86,91 +109,114 @@ export const Appointments = () => {
                 <Col span={12} key={app.id}>
                   <Card
                     style={{
-                      borderColor: "#ddd",
-                      boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px"
+                      borderColor: "#f0f0f0",
+                      borderRadius: 10,
+                      boxShadow: "rgba(0, 0, 0, 0.05) 0px 4px 12px",
+                      padding: "12px",
                     }}
-                    actions={[
-                      <Popconfirm
-                        placement="top"
-                        title={"Está seguro que desea borrar este turno?"}
-                        onConfirm={() => deleteHandler(app)}
-                        okText="Si"
-                        cancelText="No"
-                      >
-                        <Space
-                          style={{ fontSize: "1.5em", color: "black" }}
-                          size="middle"
-                          direction="horizontal"
-                        >
-                          Borrar
-                          <DeleteOutlined key="delete" />
-                        </Space>
-                      </Popconfirm>,
-                      <Popconfirm
-                        placement="top"
-                        title={"Está seguro que desea realizar esta llamada?"}
-                        onConfirm={() => {
-                          infoNotification("Creando llamada")
-                          changeAppointmentStatusById(app.id, "en_progreso")
-                            .then(() => navigate(`/videocall/${app.id}`))
-                            .catch(() => console.log("@TODO catchear el error"))
-                        }}
-                        okText="Si"
-                        cancelText="No"
-                        disabled={app.status === "terminado"}
-                      >
-                        <Space
-                          style={{ fontSize: "1.5em", color: "green" }}
-                          size="middle"
-                          direction="horizontal"
-                        >
-                          Iniciar llamada
-                          <PhoneOutlined key="call" />
-                        </Space>
-                      </Popconfirm>
-                    ]}
+                    bodyStyle={{ padding: "16px" }}
                   >
-                    <div className="flex--space-between">
-                      <Meta
-                        title={
+                    <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                      {/* Patient Info */}
+                      <div>
+                        <Title level={3}>
                           <Link to={`/pacientes/${app.patient?.id}`}>
                             {app.patient?.name}
                           </Link>
-                        }
-                        description={
-                          <div>
-                            <Text>{app.patient?.phoneNumber}</Text>
-                            <Text>{app.patient?.email}</Text>
-                          </div>
-                        }
-                      />
-                      <div className="flex--space-between">
-                        <Tag style={{ fontSize: "1.2em" }} color="red">
-                          {app.provider?.name}
-                        </Tag>
+                        </Title>
+                        <Text type="secondary" style={{ fontSize: '18px' }}>
+                          <PhoneOutlined style={{ marginRight: 4 }} />
+                          {app.patient?.phoneNumber}
+                        </Text>
+                        <br />
+                        <Text type="secondary" style={{ fontSize: '18px' }}>
+                          <IdcardOutlined style={{ marginRight: 4 }} />
+                          {app.patient?.dni}
+                        </Text>
+                        <br />
+                        <Text type="secondary" style={{ fontSize: '18px' }}>
+                          <CalendarOutlined style={{ marginRight: 4 }} />
+                          {moment(`${app.date} ${app.time}`, "YYYY-MM-DD HH:mm").format("D [de] MMMM [de] YYYY [a las] h:mm A")}
+                        </Text>
                       </div>
-                      <Tag style={{ fontSize: "1.2em" }} color="blue">
-                        {`${moment(app.date).format("DD/MM/YYYY")} ${app.time}`}
-                      </Tag>
+
+                      {/* Date and Provider */}
+                      {/* <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <Tag color="blue" style={{ fontSize: "0.95em", padding: "4px 8px" }}>
+                          {moment(`${app.date} ${app.time}`, "YYYY-MM-DD HH:mm").format("D [de] MMMM [de] YYYY [a las] h:mm A")}
+                        </Tag>
+                        <Tag color="red" style={{ fontSize: "0.95em", padding: "4px 8px" }}>
+                          Dr/a {app.provider?.name}
+                        </Tag>
+                      </div> */}
+
+                      {/* Status */}
                       <Tag
-                        style={{ fontSize: "1em" }}
                         color={statusColorMapping[app.status]}
+                        style={{
+                          alignSelf: "flex-start",
+                          fontWeight: 500,
+                          fontSize: "1.2em",
+                          padding: "6px 12px",
+                          borderRadius: "6px",
+                        }}
                       >
                         {app.status.toUpperCase()}
                       </Tag>
+
+                      {/* Action buttons */}
+                      <div style={{ display: "flex", justifyContent: "flex-end", gap: "16px", marginTop: "8px" }}>
+                        <Popconfirm
+                          placement="top"
+                          title="¿Está seguro que desea borrar este turno?"
+                          onConfirm={() => deleteHandler(app)}
+                          okText="Sí"
+                          cancelText="No"
+                        >
+                          <Button type="default" danger icon={<DeleteOutlined />}>
+                            Borrar
+                          </Button>
+                        </Popconfirm>
+
+                        <Popconfirm
+                          placement="top"
+                          title="¿Está seguro que desea realizar esta llamada?"
+                          onConfirm={() => {
+                            infoNotification("Creando llamada")
+                            changeAppointmentStatusById(app.id, "en_progreso")
+                              .then(() => navigate(`/videocall/${app.id}`))
+                              .catch(() => console.error("@TODO catchear el error"))
+                          }}
+                          okText="Sí"
+                          cancelText="No"
+                          disabled={app.status === "terminado"}
+                        >
+                          <Button type="primary" icon={<PhoneOutlined />} disabled={app.status === "terminado"}>
+                            Iniciar llamada
+                          </Button>
+                        </Popconfirm>
+                      </div>
                     </div>
                   </Card>
                 </Col>
               ))}
+
             </Row>
           )
 
           return rows
         }, [])
-      ) : (
-        <Text>No hay turnos</Text>
-      )}
-
+      ) :
+        <div style={{
+          width: '100%',
+          height: '300px', // or any height you want, e.g. '100vh' for full screen
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          <Empty description={<Text>El paciente no tiene turnos para los filtros seleccionados</Text>} />
+        </div>
+      }
     </Bubble>
   )
 }

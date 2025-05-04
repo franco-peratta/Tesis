@@ -1,7 +1,7 @@
 import { Appointment } from "../Appointments/model"
 
 export interface Patient {
-  id: string
+  id: number
   name: string
   dni: string
   dob: string
@@ -11,7 +11,7 @@ export interface Patient {
 }
 
 export interface PatientWithAppointments {
-  id: string
+  id: number
   name: string
   dni: string
   dob: string

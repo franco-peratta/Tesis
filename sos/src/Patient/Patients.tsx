@@ -72,7 +72,7 @@ export const Patients = () => {
     <Bubble>
       <Space size="large" direction="vertical" style={{ width: "100%" }}>
         <div className="flex--space-between">
-          <Title>Pacientes</Title>
+          <Title>Pacientes de SOS</Title>
           <Button
             onClick={() => {
               navigate(toPatientsCreate())
