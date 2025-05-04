@@ -34,7 +34,7 @@ export function Page() {
 						Salud Online Solidaria
 					</Link>
 				</strong>{" "}
-				©2023
+				©2025
 			</Footer>
 		</div>
 	)
