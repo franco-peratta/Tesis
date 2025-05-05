@@ -63,7 +63,6 @@ export const deleteUser = async (req: Request, res: Response) => {
 				id: parseInt(id)
 			},
 			include: {
-				admin: true,
 				patient: true,
 				provider: true
 			}
@@ -73,28 +72,21 @@ export const deleteUser = async (req: Request, res: Response) => {
 			return res.status(404).json({ error: "Usuario no encontrado" })
 		}
 
-		const { admin, patient, provider } = user
+		const { patient, provider } = user
 
-		res.status(200).json({ admin, patient, provider })
+		res.status(200).json({ patient, provider })
 
 		await prisma.user.delete({
 			where: {
 				id: parseInt(id)
 			},
 			include: {
-				admin: true,
 				patient: true,
 				provider: true
 			}
 		})
 
-		if (admin) {
-			await prisma.admin.delete({
-				where: {
-					id: admin.id
-				}
-			})
-		}
+
 
 		if (patient) {
 			await prisma.patient.delete({
@@ -122,22 +114,5 @@ export const deleteUser = async (req: Request, res: Response) => {
 	} catch (error) {
 		console.error(error)
 		res.status(500).json({ error: "Algo salio mal.." })
-	}
-}
-
-export const deleteUserOG = async (req: Request, res: Response) => {
-	const adminId = parseInt(req.params.id)
-	try {
-		const admin = await prisma.admin.delete({
-			where: {
-				id: adminId
-			}
-		})
-		res.json({ msg: "Usuario eliminado con exito", data: admin.id })
-	} catch (error) {
-		res
-			.status(500)
-			.json({ msg: "Error, no se pudo eliminar el usuario", error })
-		console.error(error)
 	}
 }

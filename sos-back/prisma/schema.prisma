@@ -11,19 +11,13 @@ datasource db {
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
-  email    String    @unique
-  password String
-  role     String
-  admin    Admin?
-  patient  Patient?
-  provider Provider?
-}
-
-model Admin {
-  id   Int    @id
-  name String
-  user User   @relation(fields: [id], references: [id]) // field admin id references user id 
+  id         Int       @id @default(autoincrement())
+  email      String    @unique
+  password   String
+  role       String
+  created_at DateTime  @default(now())
+  patient    Patient?
+  provider   Provider?
 }
 
 model Patient {
@@ -33,6 +27,7 @@ model Patient {
   dob         String
   phoneNumber String?
   emr         String
+  created_at  DateTime      @default(now())
   user        User          @relation(fields: [id], references: [id]) // field patient id references user id
   Appointment Appointment[]
 }
@@ -42,6 +37,7 @@ model Provider {
   name        String
   shifts      String
   phoneNumber String?
+  created_at  DateTime      @default(now())
   user        User          @relation(fields: [id], references: [id]) // field provider id references user id
   Appointment Appointment[]
 }
@@ -52,6 +48,7 @@ model Appointment {
   date       String
   time       String
   duration   Int      @default(30)
+  created_at DateTime @default(now())
   patient    Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
   patientId  Int
   provider   Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)

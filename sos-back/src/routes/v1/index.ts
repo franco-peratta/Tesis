@@ -3,24 +3,21 @@ import { Router } from "express"
 import appointmentRouter from "./appointment"
 import patientRouter from "./patient"
 import providerRouter from "./provider"
-import adminRouter from "./admin"
 import userRouter from "./user"
 import authRouter from "./auth"
 import videocallRouter from "./videocall"
-// import { auth } from "../../middlewares/auth"
+import { auth } from "../../middlewares/auth"
 
 const router = Router()
 
-// middleware
-// router.use(auth)
-
-// routes
-router.use("/patient", patientRouter)
-router.use("/provider", providerRouter)
-router.use("/appointment", appointmentRouter)
-router.use("/admin", adminRouter)
-router.use("/user", userRouter)
+// public routes
 router.use("/auth", authRouter)
-router.use("/videocall", videocallRouter)
+
+// protected routes
+router.use("/patient", auth, patientRouter)
+router.use("/provider", auth, providerRouter)
+router.use("/appointment", auth, appointmentRouter)
+router.use("/user", auth, userRouter)
+router.use("/videocall", auth, videocallRouter)
 
 export default router

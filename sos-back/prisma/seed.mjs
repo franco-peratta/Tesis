@@ -9,65 +9,51 @@ async function cleanDB() {
 	await prisma.appointment.deleteMany()
 	await prisma.provider.deleteMany()
 	await prisma.patient.deleteMany()
-	await prisma.admin.deleteMany()
 	await prisma.user.deleteMany()
 }
 
+const shifts = JSON.stringify({
+	monday: {
+		available: true,
+		shifts: [
+			{ from: 9, to: 13 },
+			{ from: 14, to: 18 }
+		]
+	},
+	tuesday: {
+		available: true,
+		shifts: [{ from: 12, to: 16 }]
+	},
+	wednesday: {
+		available: false,
+		shifts: []
+	},
+	thursday: {
+		available: true,
+		shifts: [
+			{ from: 10, to: 14 },
+			{ from: 15, to: 19 }
+		]
+	},
+	friday: {
+		available: true,
+		shifts: [
+			{ from: 8, to: 12 },
+			{ from: 13, to: 17 }
+		]
+	},
+	saturday: {
+		available: false,
+		shifts: []
+	},
+	sunday: {
+		available: false,
+		shifts: []
+	}
+})
+
 async function seed() {
 	await cleanDB()
-
-	await prisma.user.create({
-		data: {
-			email: "admin@mail.com",
-			password: await bcrypt.hash("password", 10),
-			role: "admin",
-			admin: {
-				create: {
-					name: "Admin User"
-				}
-			}
-		}
-	})
-
-	const shifts = JSON.stringify({
-		monday: {
-			available: true,
-			shifts: [
-				{ from: 9, to: 13 },
-				{ from: 14, to: 18 }
-			]
-		},
-		tuesday: {
-			available: true,
-			shifts: [{ from: 12, to: 16 }]
-		},
-		wednesday: {
-			available: false,
-			shifts: []
-		},
-		thursday: {
-			available: true,
-			shifts: [
-				{ from: 10, to: 14 },
-				{ from: 15, to: 19 }
-			]
-		},
-		friday: {
-			available: true,
-			shifts: [
-				{ from: 8, to: 12 },
-				{ from: 13, to: 17 }
-			]
-		},
-		saturday: {
-			available: false,
-			shifts: []
-		},
-		sunday: {
-			available: false,
-			shifts: []
-		}
-	})
 
 	const { provider: cami } = await prisma.user.create({
 		data: {

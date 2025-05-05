@@ -1,6 +1,6 @@
-import { User } from "@prisma/client"
 import { Request, Response, NextFunction } from "express"
 import jwt from "jsonwebtoken"
+import { User } from "@prisma/client"
 import { getUserById } from "../repos/user"
 
 const JWT_SECRET = process.env.JWT_SECRET || "secret"
@@ -23,6 +23,7 @@ export async function auth(
 	next: NextFunction
 ) {
 	const token = req.header("Authorization")?.replace("Bearer ", "")
+	console.log({ token: req.header("Authorization") })
 
 	if (!token) {
 		return res.status(401).send({ error: "Authentication failed" })

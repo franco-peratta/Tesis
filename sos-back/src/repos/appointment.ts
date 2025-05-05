@@ -1,4 +1,3 @@
-import { Patient, Provider, Appointment } from "@prisma/client"
 import { prisma } from "../config/db"
 
 export const getAllAppointments = async () => {

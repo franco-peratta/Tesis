@@ -23,7 +23,7 @@ export const login = async (req: Request, res: Response) => {
 
 	const user = await getUserByEmail(email)
 
-	if (!user || user.role !== role) {
+	if (!user) {
 		return res.status(401).send({ error: "Credenciales Incorrectas" })
 	}
 
@@ -36,7 +36,7 @@ export const login = async (req: Request, res: Response) => {
 	const jwt_body = {
 		id: user.id,
 		email: user.email,
-		isAdmin: user.role === "admin"
+		role: user.role
 	}
 
 	const token = jwt.sign(jwt_body, JWT_SECRET, {
@@ -51,7 +51,7 @@ export const login = async (req: Request, res: Response) => {
 	const userToReturn = {
 		id: user.id,
 		email: user.email,
-		role: user.role
+		role: user.role,
 	}
 
 	res.send({ data: { token, user: userToReturn } })
@@ -70,19 +70,15 @@ export const register = async (req: Request, res: Response) => {
 
 		let id
 
-		if (role === "admin") {
-			console.log("No se puede crear un usuario admin desde aca")
-			res
-				.status(400)
-				.send({ errorMsg: "No se puede crear un usario admin desde esta ruta" })
-		}
-
 		if (role === "patient") {
 			id = await createPatientUser(req.body as TPatientUser)
-		}
-
-		if (role === "provider") {
-			id = await createProviderUser(req.body as TProviderUser)
+		} else {
+			if (role === "provider") {
+				id = await createProviderUser(req.body as TProviderUser)
+			}
+			else {
+				res.status(400).send({ message: "El rol no existe" })
+			}
 		}
 
 		res.status(201).send({ data: { id }, message: "Usuario creado con exito" })
@@ -107,6 +103,7 @@ const createPatientUser = async (data: TPatientUser) => {
 		name: data.name,
 		dni: data.dni,
 		dob: data.dob,
+		created_at: new Date(),
 		phoneNumber: data.phoneNumber,
 		emr: ""
 	}
@@ -122,6 +119,7 @@ const createProviderUser = async (data: TProviderUser) => {
 		email: data.email,
 		password: hashedPassword,
 		role: "provider",
+		created_at: new Date(),
 		name: data.name,
 		shifts: data.shifts,
 		phoneNumber: data.phoneNumber
