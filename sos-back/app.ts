@@ -1,7 +1,7 @@
 import express from "express"
 import routes from "./src/routes/index"
 import * as dotenv from "dotenv"
-import cors from "cors"
+import cors, { CorsOptions } from "cors"
 import morgan from "morgan"
 
 const app = express()
@@ -13,15 +13,28 @@ dotenv.config()
 app.set("port", 3000)
 
 // CORS
-const corsOptions = {
-	origin: "*",
+const corsOptions: CorsOptions = {
+	origin: function (origin, callback) {
+		const allowedOrigins = [
+			"https://tesis-sable.vercel.app/",
+		];
+
+		// Allow localhost from any port (e.g., http://localhost:3000, 5173, etc.)
+		const isLocalhost = origin?.startsWith("http://localhost");
+
+		if (!origin || allowedOrigins.includes(origin) || isLocalhost) {
+			callback(null, true);
+		} else {
+			callback(new Error("Not allowed by CORS"));
+		}
+	},
+	credentials: true,
 	optionsSuccessStatus: 200,
 	methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-	preflightContinue: false,
-	credentials: true,
 	allowedHeaders:
 		"Content-Type, Authorization, Content-Length, X-Requested-With, Accept"
-}
+};
+
 app.use(cors(corsOptions))
 
 //middlewares
