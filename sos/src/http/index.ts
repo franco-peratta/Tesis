@@ -49,7 +49,6 @@ export async function http<T>(
     fetchOptions.body = JSON.stringify(params);
   }
 
-  console.log({ domain, url })
   const response = await fetch(`${domain}${url}`, fetchOptions);
 
   if (!response.ok) {
