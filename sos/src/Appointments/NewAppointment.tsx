@@ -251,7 +251,7 @@ export const NewAppointment = () => {
         date: appointment.date.format("YYYY-MM-DD"),
         time: appointment.time.format("HH:mm")
       }
-      const data = await addAppointment(appDto)
+      await addAppointment(appDto)
       successNotification("Turno creado correctamente")
       navigate("/turnos")
     } catch (e) {

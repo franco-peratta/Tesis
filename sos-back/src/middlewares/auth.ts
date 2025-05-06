@@ -23,7 +23,6 @@ export async function auth(
 	next: NextFunction
 ) {
 	const token = req.header("Authorization")?.replace("Bearer ", "")
-	console.log({ token: req.header("Authorization") })
 
 	if (!token) {
 		return res.status(401).send({ error: "Authentication failed" })

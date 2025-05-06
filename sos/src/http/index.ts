@@ -1,7 +1,6 @@
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH"
 
-// @TODO use env vars
-const domain = "http://localhost:5000/api/v1"
+const domain = process.env.REACT_APP_API_URL;
 
 interface HttpOptions {
   headers?: Record<string, string>

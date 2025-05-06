@@ -33,5 +33,5 @@ app.use(morgan("combined"))
 app.use("/", routes)
 
 app.listen(process.env.PORT || 3000, () => {
-	console.log(`Server started on http://localhost:${process.env.PORT || 3000}`)
+	console.log(`Server started on ${process.env.HOST}:${process.env.PORT || 3000}`)
 })
