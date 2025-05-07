@@ -61,7 +61,7 @@ export const Login = () => {
 					)
 				})
 				.catch((err) => {
-					errorNotification("Error", "Datos invalidos", "topRight")
+					errorNotification("Error", "Datos inválidos", "topRight")
 				})
 				.finally(() => {
 					setLoading(false)
@@ -79,7 +79,7 @@ export const Login = () => {
 				})
 				.catch((err) => {
 					console.error({ err })
-					errorNotification("Error", "Datos invalidos", "topRight")
+					errorNotification("Error", "Datos inválidos", "topRight")
 				})
 				.finally(() => {
 					setLoading(false)
@@ -148,7 +148,7 @@ export const Login = () => {
 								rules={[
 									{
 										required: true,
-										message: "Por favor ingrese su numero de documento"
+										message: "Por favor ingrese su número de documento"
 									}
 								]}
 							>
@@ -171,12 +171,12 @@ export const Login = () => {
 						)}
 						{mode === "register" && (
 							<Form.Item
-								label="Numero de Telefono"
+								label="Número de Telefono"
 								name="phoneNumber"
 								rules={[
 									{
 										required: true,
-										message: "Por favor ingrese su numero de telefono"
+										message: "Por favor ingrese su número de telefono"
 									}
 								]}
 							>
@@ -189,7 +189,7 @@ export const Login = () => {
 							rules={[
 								{
 									required: true,
-									message: "Ingrese un email valido",
+									message: "Ingrese un email válido",
 									pattern: emailRegex
 								}
 							]}

@@ -55,7 +55,7 @@ export const AppointmentCard = ({ appointment, setAppointments }: Props) => {
 			<Paragraph>Estado: {formatStatusName(status)}</Paragraph>
 			<Paragraph>Fecha: {date}</Paragraph>
 			<Paragraph>Hora: {time}</Paragraph>
-			<Paragraph>Medico: {provider.name}</Paragraph>
+			<Paragraph>Médico: {provider.name}</Paragraph>
 			<Button
 				type="primary"
 				onClick={handleJoinClick}

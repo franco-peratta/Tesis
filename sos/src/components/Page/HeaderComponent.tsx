@@ -128,7 +128,7 @@ const UserDropdown = () => {
       icon: <></>
     },
     {
-      label: "Cerrar Sesion",
+      label: "Cerrar Sesión",
       key: "signOut",
       onClick: signout,
       icon: <></>

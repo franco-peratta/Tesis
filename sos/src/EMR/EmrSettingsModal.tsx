@@ -58,7 +58,7 @@ export const EmrSettingsModal = ({
           rules={[
             {
               required: true,
-              message: "Fecha no valida"
+              message: "Fecha no válida"
             }
           ]}
         >

@@ -15,8 +15,8 @@ const clinicalRecordTemplate = `
 - **Fecha de Nacimiento:** 
 - **Edad:**  
 - **Sexo:** 
-- **Obra Social / Seguro medico / Medicina Prepaga:** 
-- **Numero de Afiliado:** 
+- **Obra Social / Seguro médico / Medicina Prepaga:** 
+- **Número de Afiliado:** 
 
 
 ---
@@ -36,7 +36,7 @@ const clinicalRecordTemplate = `
 
 ---
 
-## 🩺 Examen Fisico
+## 🩺 Examen Físico
 
 | Medición          | Valor        |
 |-------------------|--------------|
@@ -55,7 +55,7 @@ const clinicalRecordTemplate = `
 ## 💊 Plan de Tratamiento
 
 - Medicamentos recetados:  
-  - **medicacion XX mg** – Tomar cada N horas según necesidad  
+  - **medicación XX mg** – Tomar cada N horas según necesidad  
 - 
 
 ---

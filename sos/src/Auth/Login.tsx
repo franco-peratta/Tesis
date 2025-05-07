@@ -46,7 +46,7 @@ export const LoginPage = () => {
           })
           .catch((err) => {
             console.error({ err })
-            errorNotification("Datos invalidos")
+            errorNotification("Datos inválidos")
           })
           .finally(() => {
             setLoading(false)
@@ -104,7 +104,7 @@ export const LoginPage = () => {
             rules={[
               {
                 required: true,
-                message: "Ingrese un email valido",
+                message: "Ingrese un email válido",
                 pattern: emailRegex
               }
             ]}

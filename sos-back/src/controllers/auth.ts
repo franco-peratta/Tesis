@@ -18,7 +18,7 @@ export const login = async (req: Request, res: Response) => {
 	if (!email || !password) {
 		return res
 			.status(400)
-			.send({ error: "Correo electronico o contraseña incompletos" })
+			.send({ error: "Correo electrónico o contraseña incompletos" })
 	}
 
 	const user = await getUserByEmail(email)
@@ -85,7 +85,7 @@ export const register = async (req: Request, res: Response) => {
 	} catch (error) {
 		console.log(error)
 		if (error instanceof Error && error.message.includes("prisma")) {
-			res.statusMessage = "Datos invalidos"
+			res.statusMessage = "Datos inválidos"
 			return res.status(400).end()
 		}
 		res.statusMessage = "Algo salio mal"

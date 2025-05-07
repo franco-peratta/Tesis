@@ -37,7 +37,7 @@ export const Patients = () => {
   useEffect(() => {
     const columnsSchema = [
       {
-        title: "Name",
+        title: "Nombre",
         dataIndex: "name",
         key: "name",
         render: (_: any, record: Patient) => (

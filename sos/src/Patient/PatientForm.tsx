@@ -62,7 +62,7 @@ export const PatientForm = (_props: {}) => {
           }}
         />
       </div>
-      <Form form={form} layout="vertical" name="details" onFinish={() => {}}>
+      <Form form={form} layout="vertical" name="details" onFinish={() => { }}>
         <Form.Item
           name="name"
           label="Nombre completo"
@@ -84,15 +84,15 @@ export const PatientForm = (_props: {}) => {
         </Form.Item>
         <Form.Item
           name="email"
-          label="Correo Electronico"
+          label="Correo Electrónico"
           rules={[
             {
               type: "email",
-              message: "La direccion de correo electronico no es valida"
+              message: "La direccion de correo electrónico no es válida"
             },
             {
               required: true,
-              message: "Por favor, ingrese su direccion de correo electronico"
+              message: "Por favor, ingrese su direccion de correo electrónico"
             }
           ]}
         >
@@ -100,11 +100,11 @@ export const PatientForm = (_props: {}) => {
         </Form.Item>
         <Form.Item
           name="phoneNumber"
-          label="Numero de telefono"
+          label="Número de telefono"
           rules={[
             {
               required: true,
-              message: "Por favor, ingrese su numero de telefono"
+              message: "Por favor, ingrese su número de telefono"
             }
           ]}
         >
@@ -112,7 +112,7 @@ export const PatientForm = (_props: {}) => {
             type="number"
             allowClear
             size="large"
-            placeholder="Numero de telefono"
+            placeholder="Número de teléfono"
           />
         </Form.Item>
         <Row>
@@ -123,7 +123,7 @@ export const PatientForm = (_props: {}) => {
               rules={[
                 {
                   required: true,
-                  message: "Fecha no valida"
+                  message: "Fecha no válida"
                 }
               ]}
             >

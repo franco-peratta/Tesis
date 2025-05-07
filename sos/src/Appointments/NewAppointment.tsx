@@ -388,7 +388,7 @@ export const NewAppointment = () => {
                   rules={[
                     {
                       required: true,
-                      message: "Fecha no valida"
+                      message: "Fecha no válida"
                     }
                   ]}
                 >
@@ -406,7 +406,7 @@ export const NewAppointment = () => {
                   rules={[
                     {
                       required: true,
-                      message: "Horario no valido"
+                      message: "Horario no válido"
                     }
                   ]}
                 >
@@ -426,7 +426,7 @@ export const NewAppointment = () => {
                   />
                 </Form.Item>
                 <Form.Item
-                  label="Duracion (WIP)"
+                  label="Duración"
                   name="duration"
                   rules={[
                     {

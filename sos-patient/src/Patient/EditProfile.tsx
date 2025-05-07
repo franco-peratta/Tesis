@@ -113,7 +113,7 @@ export const EditProfile = () => {
 					<Input prefix={<IdcardOutlined />} placeholder="Enter your dni" />
 				</Form.Item>
 				<Form.Item
-					label="Numero de telefono"
+					label="Número de telefono"
 					name="phoneNumber"
 					rules={[
 						{ required: false, message: "Please enter your phone number" },
