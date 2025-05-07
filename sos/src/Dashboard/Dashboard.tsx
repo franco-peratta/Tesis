@@ -52,11 +52,6 @@ export const Dashboard = () => {
     completedAppointmentsLastQuarter
   } = data;
 
-  function percent(value: number, total: number): number {
-    if (total === 0) return 0;
-    return Math.round((value / total) * 1000) / 10; // 1 decimal
-  }
-
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%' }}>
       <Title level={2} style={{ padding: '0 24px 12px 24px' }}>Dashboard</Title>
@@ -69,54 +64,54 @@ export const Dashboard = () => {
         }}
       >
         <StatCard
-          title="Total Patients"
+          title="Número de pacientes"
           value={<AnimatedStatistic
             value={totalPatients}
             precision={0}
             prefix=""
           />}
           icon={<UserOutlined />}
-          description="All registered patients"
+          description="Todos los pacientes registrados"
           color="#f97316"
         />
         <StatCard
-          title="Total Doctors"
+          title="Número de doctores"
           value={<AnimatedStatistic
             value={totalProviders}
             precision={0}
             prefix=""
           />}
           icon={<UserOutlined />}
-          description="Active medical staff"
+          description="Todos los doctores registrados"
           color="#06b6d4"
         />
         <StatCard
-          title="Total Appointments"
+          title="Número de turnos"
           value={<AnimatedStatistic
             value={totalAppointments}
             precision={0}
             prefix=""
           />}
           icon={<CalendarOutlined />}
-          description="All time appointments"
+          description="Todos los turnos creados"
           color="#8b5cf6"
         />
         <StatCard
-          title="New Patients"
+          title="Número de pacientes nuevos"
           value={<AnimatedStatistic
             value={newPatientsLastQuarter}
             precision={0}
             prefix=""
           />}
           icon={<UserAddOutlined />}
-          description="Last quarter"
+          description="En el último semestre"
           color="#ec4899"
         />
       </div>
       <div style={{ padding: "0 24px 0 24px" }}>
-        <Card title="Appointment Status" bordered={false} style={{}}>
+        <Card title="Estado de turnos" bordered={false} style={{}}>
           <p style={{ color: "rgba(0,0,0,0.45)", marginBottom: "1rem" }}>
-            Current appointment metrics
+            Métricas de los turnos
           </p>
           <div
             style={{
@@ -128,25 +123,25 @@ export const Dashboard = () => {
           >
             <StatusItem
               icon={<CheckCircleOutlined style={{ color: "#10b981", fontSize: 20 }} />}
-              label="Completed All Time"
+              label="Total de turnos completados"
               value={completedAppointments.toLocaleString()}
               color="#10b981"
             />
             <StatusItem
               icon={<CheckCircleOutlined style={{ color: "#10b981", fontSize: 20 }} />}
-              label="Completed Last Quarter"
+              label="Turnos completados en el último semestre"
               value={completedAppointmentsLastQuarter.toLocaleString()}
               color="#10b981"
             />
             <StatusItem
               icon={<AlertOutlined style={{ color: "#f59e0b", fontSize: 20 }} />}
-              label="Pending Appointments"
+              label="Turnos pendientes"
               value={pendingAppointments.toLocaleString()}
               color="#f59e0b"
             />
             <StatusItem
               icon={<ClockCircleOutlined style={{ color: "#3b82f6", fontSize: 20 }} />}
-              label="Upcoming Appointments"
+              label="Turnos pendientes"
               value={upcomingAppointments.toLocaleString()}
               color="#3b82f6"
             />
