@@ -1,10 +1,10 @@
 import { useLocation, useNavigate } from "react-router-dom"
 import { Avatar, Layout, Menu, Dropdown, Button, Drawer, MenuProps } from "antd"
 import {
-  DesktopOutlined,
   PieChartOutlined,
   UserOutlined,
-  MenuOutlined
+  MenuOutlined,
+  ScheduleOutlined
 } from "@ant-design/icons"
 // import { toAppointments } from "../../Appointments/routes"
 // import { toPatients } from "../../Patients/routes"
@@ -20,9 +20,17 @@ const HeaderDesktop = () => {
 
   const items = [
     {
+      label: "Dashboard",
+      key: "/dashboard",
+      icon: <PieChartOutlined />,
+      onClick: () => {
+        navigate("/dashboard")
+      }
+    },
+    {
       label: "Pacientes",
       key: "/pacientes",
-      icon: <DesktopOutlined />,
+      icon: <UserOutlined />,
       onClick: () => {
         navigate("/pacientes")
       }
@@ -30,7 +38,7 @@ const HeaderDesktop = () => {
     {
       label: "Turnos",
       key: "/turnos",
-      icon: <PieChartOutlined />,
+      icon: <ScheduleOutlined />,
       onClick: () => {
         navigate("/turnos")
       }

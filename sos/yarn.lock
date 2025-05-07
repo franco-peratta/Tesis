@@ -4246,6 +4246,11 @@ cosmiconfig@^7, cosmiconfig@^7.0.0, cosmiconfig@^7.0.1:
     path-type "^4.0.0"
     yaml "^1.10.0"
 
+countup.js@^2.8.0:
+  version "2.8.2"
+  resolved "https://registry.yarnpkg.com/countup.js/-/countup.js-2.8.2.tgz#ea49e8781693612cf11d81209a230058ef226da5"
+  integrity sha512-UtRoPH6udaru/MOhhZhI/GZHJKAyAxuKItD2Tr7AbrqrOPBX/uejWBBJt8q86169AMqKkE9h9/24kFWbUk/Bag==
+
 craco-less@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/craco-less/-/craco-less-2.0.0.tgz#a2df18c32e97ebf00f62c3f2ea4cd97035f5f640"
@@ -9980,6 +9985,13 @@ react-cookie@^4.1.1:
     "@types/hoist-non-react-statics" "^3.0.1"
     hoist-non-react-statics "^3.0.0"
     universal-cookie "^4.0.0"
+
+react-countup@^6.5.3:
+  version "6.5.3"
+  resolved "https://registry.yarnpkg.com/react-countup/-/react-countup-6.5.3.tgz#e892aa3eab2d6ba9c3cdba30bf4ed6764826d848"
+  integrity sha512-udnqVQitxC7QWADSPDOxVWULkLvKUWrDapn5i53HE4DPRVgs+Y5rr4bo25qEl8jSh+0l2cToJgGMx+clxPM3+w==
+  dependencies:
+    countup.js "^2.8.0"
 
 react-dev-utils@^12.0.0:
   version "12.0.1"

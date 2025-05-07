@@ -22,7 +22,6 @@ import {
   IdcardOutlined,
   CalendarOutlined,
   FilterOutlined,
-  UserOutlined,
   MedicineBoxOutlined
 } from "@ant-design/icons"
 import moment, { Moment } from "moment"

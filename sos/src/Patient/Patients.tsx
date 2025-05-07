@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useState } from "react"
 import { Button, Input, Space, Table, Typography } from "antd"
-import { EditOutlined, PlusOutlined } from "@ant-design/icons"
+import { PlusOutlined } from "@ant-design/icons"
 import { Bubble } from "../components/Bubble"
 import { Patient } from "./model"
 import { useNavigate } from "react-router-dom"

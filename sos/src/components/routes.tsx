@@ -10,6 +10,7 @@ import { Page } from "./Page"
 import { Appointments } from "../Appointments"
 import { NewAppointment } from "../Appointments/NewAppointment"
 import { Videocall } from "../Videocall"
+import { Dashboard } from "../Dashboard"
 
 export const routes = (
   <Routes>
@@ -19,7 +20,15 @@ export const routes = (
         path="/"
         element={
           <RequireAuth>
-            <Navigate to="/pacientes" />
+            <Navigate to="/dashboard" />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/dashboard"
+        element={
+          <RequireAuth>
+            <Dashboard />
           </RequireAuth>
         }
       />
