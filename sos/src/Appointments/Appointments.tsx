@@ -21,7 +21,9 @@ import {
   DeleteOutlined,
   IdcardOutlined,
   CalendarOutlined,
-  FilterOutlined
+  FilterOutlined,
+  UserOutlined,
+  MedicineBoxOutlined
 } from "@ant-design/icons"
 import moment, { Moment } from "moment"
 import "moment/locale/es"
@@ -47,8 +49,16 @@ export const Appointments = () => {
   const [fromDate, setFromDate] = useState<Moment | null>(null)
   const [toDate, setToDate] = useState<Moment | null>(null)
   const [view, setView] = useState<"list" | "calendar">("list")
+  const [isSmallScreen, setIsSmallScreen] = useState(false)
 
   const lastPanelChange = useRef<number>(0);
+
+  useEffect(() => {
+    const checkMobile = () => setIsSmallScreen(window.innerWidth <= 1280)
+    checkMobile()
+    window.addEventListener("resize", checkMobile)
+    return () => window.removeEventListener("resize", checkMobile)
+  }, [setIsSmallScreen])
 
   useEffect(() => {
     getUpcomingAppointmentsByProviderId(user.id)
@@ -73,8 +83,8 @@ export const Appointments = () => {
 
   const filteredAppointments = appointments.filter((app) => {
     const appDate = moment(app.date)
-    if (fromDate && appDate.isBefore(fromDate, "day")) return false
-    if (toDate && appDate.isAfter(toDate, "day")) return false
+    if (view === "list" && fromDate && appDate.isBefore(fromDate, "day")) return false
+    if (view === "list" && toDate && appDate.isAfter(toDate, "day")) return false
     return true
   })
 
@@ -95,7 +105,6 @@ export const Appointments = () => {
       </ul>
     )
   }
-
 
   const handlePanelChange = () => {
     lastPanelChange.current = Date.now(); // Store timestamp of panel change
@@ -159,7 +168,7 @@ export const Appointments = () => {
           }}
           disabled={view === "calendar"}
         >
-          Resetear filtros
+          Limpiar filtros
         </Button>
       </Space>
 
@@ -184,11 +193,26 @@ export const Appointments = () => {
                     >
                       <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                         <div>
-                          <Title level={3}>
-                            <Link to={`/pacientes/${app.patient?.id}`}>
-                              {app.patient?.name}
-                            </Link>
-                          </Title>
+                          <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+                            <Title level={3}>
+                              <Link to={`/pacientes/${app.patient?.id}`}>
+                                {app.patient?.name}
+                              </Link>
+                            </Title>
+                            <Tag
+                              color="blue"
+                              style={{
+                                alignSelf: "flex-start",
+                                fontWeight: 500,
+                                fontSize: "1.2em",
+                                padding: "6px 12px",
+                                borderRadius: "6px",
+                              }}
+                            >
+                              <MedicineBoxOutlined style={{ marginRight: 4 }} />
+                              {app.provider?.name}
+                            </Tag>
+                          </div>
                           <Text type="secondary" style={{ fontSize: '18px' }}>
                             <PhoneOutlined style={{ marginRight: 4 }} />
                             {app.patient?.phoneNumber}
@@ -203,6 +227,7 @@ export const Appointments = () => {
                             <CalendarOutlined style={{ marginRight: 4 }} />
                             {moment(`${app.date} ${app.time}`, "YYYY-MM-DD HH:mm").format("D [de] MMMM [de] YYYY [a las] h:mm A")}
                           </Text>
+                          <br />
                         </div>
 
                         <Tag
@@ -270,14 +295,16 @@ export const Appointments = () => {
           </div>
         )
       ) : (
-        <Calendar
-          dateCellRender={dateCellRender}
-          fullscreen
-          mode="month"
-          disabledDate={(current) => current && current.year() < 2025}
-          onSelect={handleSelect}
-          onPanelChange={handlePanelChange}
-        />
+        <div style={{ maxWidth: "100%", overflowX: "auto" }}>
+          <Calendar
+            dateCellRender={dateCellRender}
+            fullscreen={!isSmallScreen}
+            mode="month"
+            disabledDate={(current) => current && current.year() < 2025}
+            onSelect={handleSelect}
+            onPanelChange={handlePanelChange}
+          />
+        </div>
       )}
     </Bubble>
   )

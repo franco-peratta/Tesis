@@ -55,7 +55,7 @@ const clinicalRecordTemplate = `
 ## 💊 Plan de Tratamiento
 
 - Medicamentos recetados:  
-  - **medicaion XX mg** – Tomar cada N horas según necesidad  
+  - **medicacion XX mg** – Tomar cada N horas según necesidad  
 - 
 
 ---
@@ -67,8 +67,6 @@ const clinicalRecordTemplate = `
 
 ---
 `;
-
-
 
 interface EMRProps {
     initialMarkdown: string;
@@ -90,7 +88,7 @@ export const EmrComponent: React.FC<EMRProps> = ({ initialMarkdown, onSave }) =>
     };
 
     return (
-        <div className="p-4 border rounded shadow bg-white">
+        <div className="markdown-editor p-4 border rounded shadow bg-white">
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1em' }}>
                 <Button
                     icon={viewMode === 'edit' ? <EditOutlined /> : <EditOutlined rotate={90} />}

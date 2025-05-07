@@ -20,12 +20,13 @@ import { getPatientByIdWithAppointments } from "./Handler"
 import { toPatients } from "./routes"
 import { errorNotification, successNotification } from "../Notification"
 import { updateEMR } from "../EMR/Handler"
-import "./styles.less"
 import {
   changeAppointmentStatusById,
   deleteAppointment
 } from "../Appointments/Handler"
 import { EMR } from "../EMR"
+
+import "./styles.less"
 
 const { Title, Text } = Typography
 const { TabPane } = Tabs

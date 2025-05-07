@@ -39,16 +39,13 @@ export const Videocall = () => {
   if (error) return <span>Error page goes here | {error}</span>
 
   const handleMeetingEnd = async () => {
-    alert("ENTREEEEE")
     infoNotification("Videollamada finaliza")
-    console.log("Videollamada finaliza", appointment)
     await changeAppointmentStatusById(appointment.id, "terminado")
     navigate("/")
   }
 
-  const handleParticipantLeft = async (res) => {
+  const handleParticipantLeft = async () => {
     console.log("PARTICIPANT LEFT")
-    console.log(res)
   }
 
   const setPatientInfo = (patientInfo) => {
@@ -73,7 +70,9 @@ export const Videocall = () => {
     <div
       className="videocall-container"
       style={{
-        gridTemplateColumns: `75% auto`
+        gridTemplateColumns: `75% auto`,
+        height: "100%",
+        width: "100%"
       }}
     >
       <Jitsi
@@ -88,7 +87,6 @@ export const Videocall = () => {
       />
       <RightPanel
         patientInfo={appointment.patient}
-        setPatientInfo={setPatientInfo}
       />
     </div>
   )
