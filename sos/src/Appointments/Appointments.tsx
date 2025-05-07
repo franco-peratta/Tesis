@@ -18,11 +18,11 @@ import {
 import {
   PlusOutlined,
   PhoneOutlined,
-  DeleteOutlined,
   IdcardOutlined,
   CalendarOutlined,
   FilterOutlined,
-  MedicineBoxOutlined
+  MedicineBoxOutlined,
+  CheckOutlined
 } from "@ant-design/icons"
 import moment, { Moment } from "moment"
 import "moment/locale/es"
@@ -64,18 +64,6 @@ export const Appointments = () => {
       .then(({ data }) => setAppointments(data))
       .finally(() => setLoading(false))
   }, [user])
-
-  const deleteHandler = async (appointment: Appointment) => {
-    if (!appointment) return
-    try {
-      await deleteAppointment(appointment.id)
-      setAppointments((prev) =>
-        prev?.filter((app) => app.id !== appointment.id)
-      )
-    } catch (e) {
-      console.error("Error: ", e)
-    }
-  }
 
   if (loading) return <Loader />
   if (!appointments) return <Loader />
@@ -245,13 +233,23 @@ export const Appointments = () => {
                         <div style={{ display: "flex", justifyContent: "flex-end", gap: "16px", marginTop: "8px" }}>
                           <Popconfirm
                             placement="top"
-                            title="¿Está seguro que desea borrar este turno?"
-                            onConfirm={() => deleteHandler(app)}
+                            title="¿Está seguro que desea marcar el turno como completado?"
+                            onConfirm={() => {
+                              changeAppointmentStatusById(app.id, "terminado")
+                                .then(() => {
+                                  infoNotification("Turno marcado como finalizado")
+                                  getUpcomingAppointmentsByProviderId(user.id)
+                                    .then(({ data }) => setAppointments(data))
+                                    .finally(() => setLoading(false))
+                                })
+
+                                .catch(() => console.error("Error al actualizar el turno"))
+                            }}
                             okText="Sí"
                             cancelText="No"
                           >
-                            <Button type="default" danger icon={<DeleteOutlined />}>
-                              Borrar
+                            <Button type="default" icon={<CheckOutlined />}>
+                              Finalizar
                             </Button>
                           </Popconfirm>
 
@@ -305,6 +303,6 @@ export const Appointments = () => {
           />
         </div>
       )}
-    </Bubble>
+    </Bubble >
   )
 }

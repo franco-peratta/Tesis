@@ -211,47 +211,39 @@ const Details = ({
               </div>
             )
 
-            const actions = [
-              <Popconfirm
-                placement="top"
-                title={"Está seguro que desea borrar este turno?"}
-                onConfirm={() => deleteHandler({ ...app, patientId: patient.id })}
-                okText="Si"
-                cancelText="No"
-              >
-                <DeleteOutlined key="delete" />
-              </Popconfirm>,
-              <Popconfirm
-                placement="top"
-                title={"Finalizar llamada?"}
-                onConfirm={async () => {
-                  try {
-                    await changeAppointmentStatusById(app.id, "terminado")
-                    navigate(0)
-                  } catch (err) {
-                    console.error(err)
-                  }
-                }}
-                okText="Si"
-                cancelText="No"
-              >
-                <CheckOutlined key="check" disabled={app.status === "terminado"} />
-              </Popconfirm>,
-              <Popconfirm
-                placement="top"
-                title={"Iniciar llamada?"}
-                onConfirm={() => {
-                  changeAppointmentStatusById(app.id, "en_progreso")
-                    .then(() => navigate(`/videocall/${app.id}`))
-                    .catch((e) => { errorNotification("Error al crear la llamada"); console.error(e) })
+            const actions = []
 
-                }}
-                okText="Si"
-                cancelText="No"
-              >
-                <PhoneOutlined key="call" disabled={app.status === "terminado"} />
-              </Popconfirm>
-            ]
+            if (app.status !== "terminado") actions.push(<Popconfirm
+              placement="top"
+              title={"Finalizar llamada?"}
+              onConfirm={async () => {
+                try {
+                  await changeAppointmentStatusById(app.id, "terminado")
+                  navigate(0)
+                } catch (err) {
+                  console.error(err)
+                }
+              }}
+              okText="Si"
+              cancelText="No"
+            >
+              <CheckOutlined key="check" />
+            </Popconfirm>)
+
+            actions.push(<Popconfirm
+              placement="top"
+              title={"Iniciar llamada?"}
+              onConfirm={() => {
+                changeAppointmentStatusById(app.id, "en_progreso")
+                  .then(() => navigate(`/videocall/${app.id}`))
+                  .catch((e) => { errorNotification("Error al crear la llamada"); console.error(e) })
+
+              }}
+              okText="Si"
+              cancelText="No"
+            >
+              <PhoneOutlined key="call" />
+            </Popconfirm>)
 
             return (
               <Card key={app.id} style={{ width: 300 }} actions={actions}>
