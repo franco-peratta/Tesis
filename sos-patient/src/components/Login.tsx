@@ -98,7 +98,8 @@ export const Login = () => {
 					display: "flex",
 					justifyContent: "center",
 					alignItems: "center",
-					height: "100%"
+					height: "100%",
+					marginTop: mode === "register" ? "2em" : 0,
 				}}
 			>
 				<div
@@ -107,7 +108,6 @@ export const Login = () => {
 						flexDirection: "column",
 						gap: "2em",
 						padding: "2.5em",
-						border: "0.5px solid lightgray",
 						alignItems: "center",
 						borderRadius: "10%"
 					}}
