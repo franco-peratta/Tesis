@@ -82,7 +82,6 @@ export async function http<T>(
   return responseBody;
 }
 
-
 interface Response<T> {
   data: T
   message?: string

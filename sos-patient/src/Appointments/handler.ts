@@ -6,10 +6,10 @@ export const getAppointmentsByPatientId = async (patientId: string) => {
 }
 
 export const updateAppointmentStatus = async (
-	appointment: Appointment,
-	status: Status = "en_progreso"
+	id: string,
+	status: Status
 ) => {
-	return await http<Appointment>("PATCH", `/appointment/${appointment.id}`, {
+	return await http<Appointment>("PATCH", `/appointment/${id}`, {
 		params: {
 			status
 		}

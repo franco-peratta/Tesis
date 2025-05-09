@@ -50,7 +50,7 @@ export const Login = () => {
 
 		if (mode === "register") {
 			http("POST", "/auth/register", {
-				params: { ...values, role: "provider" }
+				params: { ...values, role: "patient" }
 			})
 				.then(() => {
 					setMode("login")
@@ -107,8 +107,9 @@ export const Login = () => {
 						flexDirection: "column",
 						gap: "2em",
 						padding: "2.5em",
-						border: "1px solid black",
-						alignItems: "center"
+						border: "0.5px solid lightgray",
+						alignItems: "center",
+						borderRadius: "10%"
 					}}
 				>
 					<Image

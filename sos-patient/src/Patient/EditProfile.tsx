@@ -65,7 +65,7 @@ export const EditProfile = () => {
 		<Card
 			style={{
 				width: "auto",
-				margin: "2em 5em",
+				margin: "2em 0",
 				boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.2)",
 				backgroundColor: "white",
 				fontFamily: "Arial, sans-serif",

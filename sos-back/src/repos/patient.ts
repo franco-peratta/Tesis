@@ -60,18 +60,21 @@ export const getPatientByIdWithAppointments = async (id: number) => {
 }
 
 export const addPatient = async (patient: Omit<User & Patient, "id">) => {
-	const randomPassword = Math.random().toString(36).slice(-8)
+	const defaultPassword = "saludonlinesolidaria"
+
+	const emr = patient.emr && patient.emr.length > 0 ? patient.emr : emrTemplate
+
 	const patientData = await prisma.patient.create({
 		data: {
 			name: patient.name,
 			dni: patient.dni,
-			emr: patient.emr,
 			dob: patient.dob,
 			phoneNumber: patient.phoneNumber,
+			emr,
 			user: {
 				create: {
 					email: patient.email,
-					password: await bcrypt.hash(patient.password || randomPassword, 10),
+					password: await bcrypt.hash(patient.password || defaultPassword, 10),
 					role: "patient"
 				}
 			}
@@ -116,3 +119,64 @@ export const deletePatient = async (id: number) => {
 	})
 	return data
 }
+
+const emrTemplate = `
+# 🧑‍⚕️ Expediente Clínico: 
+
+- **Doctor(a):** 
+- **Nacionalidad:** 
+- **Fecha de Nacimiento:** 
+- **Edad:**  
+- **Sexo:** 
+- **Obra Social / Seguro médico / Medicina Prepaga:** 
+- **Número de Afiliado:** 
+
+
+---
+
+## 📋 Antecedentes Personales y Familiares
+
+-   
+- 
+
+---
+
+# Fecha de consulta: 
+
+## 🔍 Motivo de Consulta
+
+-
+
+---
+
+## 🩺 Examen Físico
+
+| Medición          | Valor        |
+|-------------------|--------------|
+| Presión arterial  | XX mmHg  |
+| Frecuencia cardíaca | XX lpm       |
+| Temperatura       | XX °C       |
+| Frecuencia respiratoria | XX rpm  |
+
+---
+
+## 🧪 Evolución
+
+-
+---
+
+## 💊 Plan de Tratamiento
+
+- Medicamentos recetados:  
+  - **medicación XX mg** – Tomar cada N horas según necesidad  
+- 
+
+---
+
+## ✅ Pendientes
+
+- [x] Examen físico  
+- [ ] Revisar análisis de sangre
+
+---
+`;

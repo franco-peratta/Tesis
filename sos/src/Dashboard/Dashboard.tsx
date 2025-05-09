@@ -141,7 +141,7 @@ export const Dashboard = () => {
             />
             <StatusItem
               icon={<ClockCircleOutlined style={{ color: "#3b82f6", fontSize: 20 }} />}
-              label="Turnos pendientes"
+              label="Turnos programados a futuro"
               value={upcomingAppointments.toLocaleString()}
               color="#3b82f6"
             />

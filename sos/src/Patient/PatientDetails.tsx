@@ -4,7 +4,6 @@ import moment from "moment"
 import { Button, Card, Popconfirm, Space, Tabs, Tag, Typography, Empty, Divider } from "antd"
 import {
   CloseOutlined,
-  DeleteOutlined,
   PhoneOutlined,
   CheckOutlined,
   PlusOutlined,
@@ -99,7 +98,7 @@ export const PatientDetails = () => {
   )
 }
 
-const statusOptions = ["espera", "en_progreso", "terminado"] as const
+const statusOptions = ["espera", "en_progreso", "terminado", "cancelado"] as const
 type StatusType = typeof statusOptions[number]
 
 const Details = ({
@@ -213,37 +212,60 @@ const Details = ({
 
             const actions = []
 
-            if (app.status !== "terminado") actions.push(<Popconfirm
-              placement="top"
-              title={"Finalizar llamada?"}
-              onConfirm={async () => {
-                try {
-                  await changeAppointmentStatusById(app.id, "terminado")
-                  navigate(0)
-                } catch (err) {
-                  console.error(err)
-                }
-              }}
-              okText="Si"
-              cancelText="No"
-            >
-              <CheckOutlined key="check" />
-            </Popconfirm>)
+            if (app.status !== "cancelado" && app.status !== "terminado") {
+              actions.push(<Popconfirm
+                placement="top"
+                title={"Cancelar turno?"}
+                onConfirm={async () => {
+                  try {
+                    await changeAppointmentStatusById(app.id, "cancelado")
+                    navigate(0)
+                  } catch (err) {
+                    console.error(err)
+                  }
+                }}
+                okText="Si"
+                cancelText="No"
+              >
+                <CloseOutlined key="cancel" />
+              </Popconfirm>)
+            }
 
-            actions.push(<Popconfirm
-              placement="top"
-              title={"Iniciar llamada?"}
-              onConfirm={() => {
-                changeAppointmentStatusById(app.id, "en_progreso")
-                  .then(() => navigate(`/videocall/${app.id}`))
-                  .catch((e) => { errorNotification("Error al crear la llamada"); console.error(e) })
+            if (app.status !== "terminado" && app.status !== "cancelado") {
+              actions.push(<Popconfirm
+                placement="top"
+                title={"Finalizar llamada?"}
+                onConfirm={async () => {
+                  try {
+                    await changeAppointmentStatusById(app.id, "terminado")
+                    navigate(0)
+                  } catch (err) {
+                    console.error(err)
+                  }
+                }}
+                okText="Si"
+                cancelText="No"
+              >
+                <CheckOutlined key="check" />
+              </Popconfirm>)
+            }
 
-              }}
-              okText="Si"
-              cancelText="No"
-            >
-              <PhoneOutlined key="call" />
-            </Popconfirm>)
+            if (app.status !== "terminado" && app.status !== "cancelado") {
+              actions.push(<Popconfirm
+                placement="top"
+                title={"Iniciar llamada?"}
+                onConfirm={() => {
+                  changeAppointmentStatusById(app.id, "en_progreso")
+                    .then(() => navigate(`/videocall/${app.id}`))
+                    .catch((e) => { errorNotification("Error al crear la llamada"); console.error(e) })
+
+                }}
+                okText="Si"
+                cancelText="No"
+              >
+                <PhoneOutlined key="call" />
+              </Popconfirm>)
+            }
 
             return (
               <Card key={app.id} style={{ width: 300 }} actions={actions}>
@@ -257,7 +279,7 @@ const Details = ({
         ) : (
           <div style={{
             width: '100%',
-            height: '300px', // or any height you want, e.g. '100vh' for full screen
+            height: '300px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'

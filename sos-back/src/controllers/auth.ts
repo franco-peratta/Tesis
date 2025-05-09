@@ -22,7 +22,6 @@ export const login = async (req: Request, res: Response) => {
 	}
 
 	const user = await getUserByEmail(email)
-
 	if (!user) {
 		return res.status(401).send({ error: "Credenciales Incorrectas" })
 	}
@@ -69,7 +68,6 @@ export const register = async (req: Request, res: Response) => {
 		}
 
 		let id
-
 		if (role === "patient") {
 			id = await createPatientUser(req.body as TPatientUser)
 		} else {
@@ -94,11 +92,10 @@ export const register = async (req: Request, res: Response) => {
 }
 
 const createPatientUser = async (data: TPatientUser) => {
-	const hashedPassword = await bcrypt.hash(data.password, 10)
 
 	const newUser = {
 		email: data.email,
-		password: hashedPassword,
+		password: data.password,
 		role: "patient",
 		name: data.name,
 		dni: data.dni,

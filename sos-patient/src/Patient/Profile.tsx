@@ -26,7 +26,6 @@ export const Profile = () => {
 	return (
 		<div
 			style={{
-				margin: "5em",
 				display: "flex",
 				flexDirection: "column",
 				alignItems: "center",

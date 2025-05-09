@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Typography, Empty } from "antd"
+import { Typography, Empty, Row, Col, Spin } from "antd"
 import { type Appointment } from "./model"
 import { AppointmentCard } from "./AppointmentCard"
 import { getAppointmentsByPatientId } from "./handler"
@@ -17,37 +17,37 @@ export const Appointments = () => {
 		getAppointmentsByPatientId(user.id)
 			.then((res) => {
 				setAppointments(res.data)
-				setLoading(false)
 			})
 			.catch(console.error)
+			.finally(() => setLoading(false))
 	}, [])
 
-	if (loading) return <p>Loading...</p>
+	if (loading) return <Spin size="large" style={{ display: "block", margin: "2em auto" }} />
 
 	return (
 		<>
-			<Title>Turnos</Title>
-			<div
-				style={{
-					display: "flex",
-					alignItems: "center",
-					justifyContent: "center",
-					flexWrap: "wrap",
-					gap: "5em"
-				}}
-			>
+			<Title level={2} style={{ textAlign: "center" }}>Turnos</Title>
+			<Row justify="center" style={{ gap: "2em" }}>
 				{appointments.length ? (
 					appointments.map((appointment) => (
-						<AppointmentCard
+						<Col
 							key={appointment.id}
-							appointment={appointment}
-							setAppointments={setAppointments}
-						/>
+							xs={22}
+							sm={16}
+							md={12}
+							lg={8}
+							xl={6}
+						>
+							<AppointmentCard
+								appointment={appointment}
+								setAppointments={setAppointments}
+							/>
+						</Col>
 					))
 				) : (
-					<Empty description={<Text>No hay turnos</Text>}></Empty>
+					<Empty description={<Text>No hay turnos</Text>} style={{ marginTop: 50 }} />
 				)}
-			</div>
+			</Row>
 		</>
 	)
 }

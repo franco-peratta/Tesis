@@ -22,7 +22,8 @@ import {
   CalendarOutlined,
   FilterOutlined,
   MedicineBoxOutlined,
-  CheckOutlined
+  CheckOutlined,
+  CloseOutlined
 } from "@ant-design/icons"
 import moment, { Moment } from "moment"
 import "moment/locale/es"
@@ -231,6 +232,28 @@ export const Appointments = () => {
                         </Tag>
 
                         <div style={{ display: "flex", justifyContent: "flex-end", gap: "16px", marginTop: "8px" }}>
+                          <Popconfirm
+                            placement="top"
+                            title="¿Está seguro que desea cancelar el turno?"
+                            onConfirm={() => {
+                              changeAppointmentStatusById(app.id, "cancelado")
+                                .then(() => {
+                                  infoNotification("Turno cancelado")
+                                  getUpcomingAppointmentsByProviderId(user.id)
+                                    .then(({ data }) => setAppointments(data))
+                                    .finally(() => setLoading(false))
+                                })
+
+                                .catch(() => console.error("Error al cancelar el turno"))
+                            }}
+                            okText="Sí"
+                            cancelText="No"
+                          >
+                            <Button type="default" danger icon={<CloseOutlined />}>
+                              Cancelar
+                            </Button>
+                          </Popconfirm>
+
                           <Popconfirm
                             placement="top"
                             title="¿Está seguro que desea marcar el turno como completado?"

@@ -1,7 +1,7 @@
 # TODO
 
-- Agregar el componente de solicitar turno a la app del paciente
 - Hacer mobile friendly la app del paciente
+- Cachear http request del dashboard
 - Reset password
 
 INFORME:
@@ -11,4 +11,3 @@ INFORME:
 - ESCENARIOS: serian los casos de usos. EJ: el senior X quiere hacer una consulta pediatrica. Explicar como se resolveria en el sistema
 - TESTING: pruebas de aceptacion
 
-Agregar a martin de colaborador github
