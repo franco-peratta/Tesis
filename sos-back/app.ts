@@ -17,6 +17,7 @@ const corsOptions: CorsOptions = {
 	origin: function (origin, callback) {
 		const allowedOrigins = [
 			"https://tesis-sable.vercel.app",
+			"https://tesis-7gu6.vercel.app"
 		];
 
 		// Allow localhost from any port (e.g., http://localhost:3000, 5173, etc.)
