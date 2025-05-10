@@ -1,11 +1,14 @@
 import { Dispatch, SetStateAction } from "react"
 import { Card, Popconfirm, Tag, Typography } from "antd"
-import { CloseOutlined, MedicineBoxOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons"
 import dayjs from "dayjs"
-import 'dayjs/locale/es';
+import 'dayjs/locale/es'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
+import { CloseOutlined, MedicineBoxOutlined, PhoneOutlined } from "@ant-design/icons"
 import { type Appointment } from "./model"
 import { updateAppointmentStatus } from "./handler"
 import { useNotifications } from "../hooks/useNotifications"
+
+dayjs.extend(customParseFormat)
 
 const { Text, Title } = Typography
 const { Meta } = Card
@@ -51,7 +54,10 @@ export const AppointmentCard = ({ appointment, setAppointments }: Props) => {
 		)
 	}
 
-	const datetime = dayjs(`${date} ${time}`).locale('es').format('dddd D [de] MMMM [-] HH:mm')
+	const datetime = dayjs(`${date} ${time}`, 'YYYY-MM-DD HH:mm')
+		.locale('es')
+		.format('dddd D [de] MMMM [-] HH:mm')
+
 
 	const Description = () => (
 		<div>

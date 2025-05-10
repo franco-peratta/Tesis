@@ -4,6 +4,7 @@ import { EditProfile, Profile } from "../Patient"
 import { Login } from "./Login"
 import { Page } from "./Page"
 import { useAuth } from "../hooks/useAuth"
+import { NewAppointment } from "../Appointments/NewAppointment"
 
 export const Routing = () => {
 	return (
@@ -15,6 +16,14 @@ export const Routing = () => {
 					element={
 						<RequireAuth>
 							<Appointments />
+						</RequireAuth>
+					}
+				/>
+				<Route
+					path="/turnos/nuevo"
+					element={
+						<RequireAuth>
+							<NewAppointment />
 						</RequireAuth>
 					}
 				/>

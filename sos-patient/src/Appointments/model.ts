@@ -6,7 +6,7 @@ export const Status = {
 	en_progreso: "en_progreso",
 	terminado: "terminado",
 	cancelado: "cancelado"
-}
+} as const
 
 export type Status = keyof typeof Status
 
@@ -17,4 +17,12 @@ export interface Appointment {
 	time: string
 	patient: Patient
 	provider: Provider
+}
+
+export interface NewAppointmentDto {
+	status: Status
+	date: string
+	time: string
+	patientId: number
+	providerId: number
 }
