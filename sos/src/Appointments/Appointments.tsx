@@ -30,7 +30,6 @@ import "moment/locale/es"
 import { Bubble } from "../components/Bubble"
 import {
   changeAppointmentStatusById,
-  deleteAppointment,
   getUpcomingAppointmentsByProviderId
 } from "./Handler"
 import { Loader } from "../components/Loader"

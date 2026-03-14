@@ -122,7 +122,8 @@ const Details = ({
     )
   }
 
-  const deleteHandler = async (appointment: any) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _deleteHandler = async (appointment: any) => {
     const { id } = appointment
     try {
       await deleteAppointment(id)

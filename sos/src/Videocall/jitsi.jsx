@@ -19,10 +19,12 @@ const Jitsi = ({
 
   useEffect(() => {
     if (jitsi && onJitsi) onJitsi(jitsi)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jitsi])
 
   useEffect(() => {
     if (error && onError) onError(error)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error])
 
   return (
@@ -120,6 +122,7 @@ const useJitsi = ({
     client.addEventListener("participantLeft", onParticipantLeft)
 
     return () => jitsi && jitsi.dispose()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.JitsiMeetExternalAPI])
 
   return { jitsi, error, loading }
