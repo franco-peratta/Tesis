@@ -1,6 +1,6 @@
 # sos-patient — Documentation
 
-Patient-facing web application for the **Salud Online Solidaria (SOS)** telemedicine platform. Patients can log in, view and manage their appointments, join video consultations, and edit their profile.
+Patient-facing web application for the **Salud Online Solidaria (SOS)** telemedicine platform. Patients can log in, view and create appointments, join video consultations, and manage their profile.
 
 ---
 
@@ -21,16 +21,16 @@ Patient-facing web application for the **Salud Online Solidaria (SOS)** telemedi
 
 ## Tech Stack
 
-| Layer         | Technology                        | Version   |
-|---------------|-----------------------------------|-----------|
-| Framework     | React                             | 18.2.0    |
-| Language      | TypeScript                        | Latest    |
-| Build tool    | Vite                              | 4.2.0     |
-| Routing       | React Router DOM                  | 6.10.0    |
-| UI library    | Ant Design (antd)                 | 5.3.3     |
-| Date handling | dayjs                             | 1.11.7    |
-| Auth storage  | react-cookie                      | 4.1.1     |
-| Linting       | ESLint + Prettier                 | 2.8.7     |
+| Layer         | Technology          | Version   |
+|---------------|---------------------|-----------|
+| Framework     | React               | 18.2.0    |
+| Language      | TypeScript          | *         |
+| Build tool    | Vite                | 4.2.0     |
+| Routing       | React Router DOM    | 6.10.0    |
+| UI library    | Ant Design (antd)   | 5.3.3     |
+| Date handling | dayjs               | ^1.11.13  |
+| Auth storage  | react-cookie        | 4.1.1     |
+| Formatter     | Prettier            | ^2.8.7    |
 
 ---
 
@@ -39,49 +39,43 @@ Patient-facing web application for the **Salud Online Solidaria (SOS)** telemedi
 ```
 sos-patient/
 ├── public/
-│   └── img/sos-logo.png            # App logo
+│   └── img/sos-logo.png
 ├── src/
 │   ├── main.tsx                    # Entry point — mounts <App />
-│   ├── App.tsx                     # Root: wraps providers (Auth, Notifications, Router)
-│   ├── App.css / index.css         # Global styles
-│   │
+│   ├── App.tsx                     # Root: Auth + Notification providers + Router
+│   ├── App.css / index.css
 │   ├── components/
-│   │   ├── Routes.tsx              # Route definitions + auth guard (RequireAuth)
+│   │   ├── Routes.tsx              # Route definitions + RequireAuth guard
 │   │   ├── Login.tsx               # Login / Register page
-│   │   └── Page.tsx                # Shared layout: Header + Footer wrapper
-│   │
+│   │   └── Page.tsx                # Shared layout: Header + Footer
 │   ├── contexts/
-│   │   ├── AuthContext.tsx         # Stores user session, signin/signout methods
+│   │   ├── AuthContext.tsx         # User session state: signin, signout
 │   │   └── NotificationContext.tsx # App-wide notification system
-│   │
 │   ├── hooks/
 │   │   ├── useAuth.tsx             # Convenience hook for AuthContext
 │   │   └── useNotifications.tsx    # Convenience hook for NotificationContext
-│   │
 │   ├── http/
-│   │   └── index.ts                # Generic HTTP client (fetch wrapper)
-│   │
+│   │   └── index.ts                # Fetch wrapper — reads VITE_API_URL, sends Bearer token
 │   ├── Appointments/
 │   │   ├── Component.tsx           # Appointments list page
 │   │   ├── AppointmentCard.tsx     # Individual appointment card
-│   │   ├── handler.ts              # API calls: getAppointmentsByPatientId, updateAppointment
-│   │   ├── model.ts                # Appointment TypeScript interface
-│   │   ├── utils.ts                # Helpers (e.g. status label formatting)
-│   │   └── index.ts                # Module re-exports
-│   │
+│   │   ├── NewAppointment.tsx      # New appointment form
+│   │   ├── handler.ts              # API calls for appointments
+│   │   ├── model.ts                # Appointment interface
+│   │   ├── utils.ts                # Helpers
+│   │   └── index.ts
 │   ├── Patient/
 │   │   ├── Profile.tsx             # View profile page
 │   │   ├── EditProfile.tsx         # Edit profile page
 │   │   ├── handler.ts              # API calls: getPatientById, updatePatient
-│   │   ├── model.ts                # Patient TypeScript interface
-│   │   └── index.ts                # Module re-exports
-│   │
+│   │   ├── model.ts                # Patient interface
+│   │   └── index.ts
 │   └── Provider/
-│       └── model.ts                # Provider (doctor) TypeScript interface
-│
-├── index.html                      # HTML shell — single div#root
-├── vite.config.ts                  # Vite config (React plugin)
-├── tsconfig.json                   # TypeScript config (strict, ESNext)
+│       └── model.ts                # Provider interface
+├── .env                            # Environment variables
+├── index.html
+├── vite.config.ts
+├── tsconfig.json
 ├── package.json
 └── yarn.lock
 ```
@@ -91,9 +85,9 @@ sos-patient/
 ## How to Run Locally
 
 ### Prerequisites
-- Node.js (v16+ recommended)
+- Node.js (v16+)
 - Yarn or npm
-- The `sos-back` API running on `http://localhost:5000`
+- `sos-back` running (see its DOCUMENTATION.md)
 
 ### Steps
 
@@ -101,163 +95,155 @@ sos-patient/
 # 1. Install dependencies
 yarn install
 
-# 2. Start development server (hot reload on http://localhost:5173)
+# 2. Start dev server — opens http://localhost:5173
 yarn dev
 ```
 
-### Available Scripts
+### Scripts
 
-| Script          | Command         | Description                        |
-|-----------------|-----------------|------------------------------------|
-| `dev` / `start` | `yarn dev`      | Start Vite dev server with HMR     |
-| `build`         | `yarn build`    | Compile TypeScript + bundle        |
-| `preview`       | `yarn preview`  | Serve the production build locally |
-| `lint`          | `yarn lint`     | Run ESLint checks                  |
+| Script          | Command        | Description                        |
+|-----------------|----------------|------------------------------------|
+| `dev` / `start` | `yarn dev`     | Dev server with hot reload         |
+| `build`         | `yarn build`   | Production bundle                  |
+| `preview`       | `yarn preview` | Serve the production build locally |
+| `lint`          | `yarn lint`    | Run ESLint                         |
 
 ---
 
 ## Environment Variables
 
-There is **no `.env` file** — the backend URL is hardcoded in `src/http/index.ts`:
-
-```ts
-const domain = "http://localhost:5000/api/v1"
+```env
+# .env
+VITE_ENV=local
+VITE_API_URL=http://localhost:5000/api/v1
 ```
 
-To point to a different backend, change that constant directly.
+The HTTP client reads `import.meta.env.VITE_API_URL` as the base URL. Change it to point to a different backend.
 
 ---
 
 ## Authentication
 
-Authentication is **cookie-based**, managed through `AuthContext`.
+Sessions are stored in cookies. Every API call sends the token as a Bearer header.
 
-### Session Storage
-- On login, the API returns `{ token, user: { id, email } }`.
-- `signin()` stores:
-  - `token` cookie
-  - `user` cookie (base64-encoded JSON)
-- Cookies are set with `SameSite: true`, `Secure: true`, and a **3-hour expiration**.
-- `signout()` removes both cookies and clears context state.
+### Flow
+1. Patient submits email + password (or registers) on `/login`.
+2. `POST /auth/login` with `role: "patient"`.
+3. Backend returns `{ token, user: { id, email } }`.
+4. `signin()` stores both in cookies (3-hour expiry, `SameSite: true`, `Secure: true`).
+5. On every API request, `src/http/index.ts` reads the token and adds `Authorization: Bearer <token>`.
+6. `RequireAuth` redirects to `/login` if no user in context.
 
-### Route Protection
-The `RequireAuth` component (in `Routes.tsx`) wraps all authenticated routes:
-- If no user in context → redirect to `/login`, preserving the originally requested URL.
-- After login, the user is redirected back to the original destination.
-
-### User Interface
 ```ts
-interface User {
-  id: number
-  email: string
-}
+interface User { id: number; email: string }
+const { user, signin, signout } = useAuth()
 ```
 
 ---
 
 ## Routes & Pages
 
-| Path            | Component      | Auth Required | Description                        |
-|-----------------|----------------|---------------|------------------------------------|
-| `/login`        | `Login`        | No            | Login or create a new account      |
-| `/`             | `Appointments` | Yes           | List of patient's appointments     |
-| `/profile`      | `Profile`      | Yes           | View patient profile               |
-| `/profile/edit` | `EditProfile`  | Yes           | Edit patient information           |
-| `*`             | 404 fallback   | Yes           | Catch-all for unknown routes       |
+| Path            | Component        | Auth | Description                    |
+|-----------------|------------------|------|--------------------------------|
+| `/login`        | `Login`          | No   | Login or register              |
+| `/`             | `Appointments`   | Yes  | Patient's appointment list     |
+| `/turnos/nuevo` | `NewAppointment` | Yes  | Create a new appointment       |
+| `/profile`      | `Profile`        | Yes  | View patient profile           |
+| `/profile/edit` | `EditProfile`    | Yes  | Edit patient information       |
+| `*`             | 404 fallback     | Yes  | Catch-all                      |
 
 ---
 
 ## Features
 
-### 1. Login / Register
-- **Login:** email + password, submits with `role: "patient"`.
+### Login / Register (`/login`)
+- **Login:** email + password with `role: "patient"`.
 - **Register:** name, DNI, date of birth, phone, email, password.
 - Toggles between both modes on the same page.
 
-### 2. Appointments List (`/`)
+### Appointments List (`/`)
 - Fetches all appointments for the logged-in patient.
-- Each card shows:
-  - Appointment ID and date/time
-  - Doctor (provider) name
-  - Status badge: `espera`, `en_progreso`, `terminado`, `cancelado`
-- **"Unirse" (Join):** Sets status to `en_progreso`, then opens a Jit.si video call in a new tab (meeting ID derived from appointment ID).
-- **"Cancelar" (Cancel):** Sets status to `cancelado`. Disabled for already-finished or cancelled appointments.
+- Each card shows: date/time, doctor name, status badge.
+- **Join call** (phone icon, tooltip "Iniciar llamada?"): sets status to `en_progreso`, opens Jit.si video call in a new tab. Available for `espera` and `en_progreso` appointments.
+- **Cancel** (X icon, tooltip "Cancelar turno?"): sets status to `cancelado`. Disabled for `terminado` or already `cancelado`.
+- **"Crear turno"** button navigates to `/turnos/nuevo`.
 
-### 3. Patient Profile (`/profile`)
+### New Appointment (`/turnos/nuevo`)
+- Patient selects provider, date, and available time slot.
+- Submits to `POST /appointment`.
+
+### Profile (`/profile`)
 - Displays: Name, DNI, Email, Phone, Date of Birth.
-- "Editar" button navigates to the edit page.
+- "Editar" navigates to `/profile/edit`.
 
-### 4. Edit Profile (`/profile/edit`)
-- Pre-populated form with current patient data.
-- Editable fields: Name, DNI, Phone, Date of Birth.
-- On submit: calls `PUT /patient/:id`, then redirects back to `/profile`.
+### Edit Profile (`/profile/edit`)
+- Pre-filled form with current data.
+- Editable: Name, DNI, Phone, Date of Birth.
+- On submit: `PUT /patient/:id` → redirect to `/profile`.
 
-### 5. Notifications
-- App-wide notification system via `NotificationContext`.
-- Used for success/error feedback on actions (cancel appointment, save profile, etc.).
+### Notifications
+- App-wide via `NotificationContext` — used for success/error feedback on all actions.
 
 ---
 
 ## Data Flows
 
-### Login Flow
+### Login
 ```
-User fills login form
-  → POST /auth/login { email, password, role: "patient" }
-  → Response: { token, user: { id, email } }
-  → signin() → stores cookies → updates AuthContext
-  → Redirect to / (or originally requested URL)
+POST /auth/login { email, password, role: "patient" }
+  → { token, user }
+  → cookies + AuthContext updated
+  → redirect to /
 ```
 
-### Appointments Flow
+### Appointments
 ```
-Component mounts (/)
+Component mounts
   → GET /appointment/patient/:patientId
-  → Renders list of AppointmentCards
+  → renders appointment cards
 
-User clicks "Unirse"
+Join call:
   → PATCH /appointment/:id { status: "en_progreso" }
-  → Opens https://meet.jit.si/<appointmentId> in new tab
+  → open https://meet.jit.si/<appointmentId>
 
-User clicks "Cancelar"
+Cancel:
   → PATCH /appointment/:id { status: "cancelado" }
-  → Shows success notification → re-renders list
+  → success notification
 ```
 
-### Profile Edit Flow
+### Edit Profile
 ```
-Component mounts (/profile/edit)
-  → GET /patient/:patientId → pre-fills form
+Component mounts
+  → GET /patient/:id → pre-fills form
 
-User submits form
-  → PUT /patient/:patientId { name, dni, phone, dob }
-  → Redirects to /profile
+Submit:
+  → PUT /patient/:id { name, dni, phone, dob }
+  → redirect to /profile
 ```
 
 ---
 
 ## API Endpoints Consumed
 
-Base URL: `http://localhost:5000/api/v1`
+Base URL: `import.meta.env.VITE_API_URL`
+All authenticated requests include `Authorization: Bearer <token>`.
 
-| Method  | Endpoint                          | Description                        |
-|---------|-----------------------------------|------------------------------------|
-| `POST`  | `/auth/login`                     | Authenticate patient               |
-| `POST`  | `/auth/register`                  | Register new patient account       |
-| `GET`   | `/appointment/patient/:patientId` | Fetch all appointments for patient |
-| `PATCH` | `/appointment/:appointmentId`     | Update appointment status          |
-| `GET`   | `/patient/:patientId`             | Fetch patient details              |
-| `PUT`   | `/patient/:patientId`             | Update patient profile             |
-
-The HTTP client (`src/http/index.ts`) is a thin wrapper around `fetch` supporting GET, POST, PUT, PATCH, and DELETE with JSON bodies.
+| Method  | Endpoint                          | Description                    |
+|---------|-----------------------------------|--------------------------------|
+| POST    | `/auth/login`                     | Authenticate patient           |
+| POST    | `/auth/register`                  | Register new patient           |
+| GET     | `/appointment/patient/:id`        | Fetch patient's appointments   |
+| PATCH   | `/appointment/:id`                | Update appointment status      |
+| POST    | `/appointment`                    | Create new appointment         |
+| GET     | `/patient/:id`                    | Fetch patient details          |
+| PUT     | `/patient/:id`                    | Update patient profile         |
 
 ---
 
 ## Key Design Decisions
 
-- **No auth headers:** HTTP requests rely on cookies for authentication rather than `Authorization: Bearer` headers.
-- **React Context only:** No Redux or external state library — auth and notifications are managed with context + local state.
-- **Jit.si for video:** Fully open-source, no account required, launches directly in the browser. Meeting room name is derived from the appointment ID.
-- **Ant Design:** Provides all UI components (forms, cards, dropdowns, notifications) for rapid, consistent UI development.
-- **Spanish UI:** All labels, statuses, and messages are in Spanish to serve the target Argentine patient population.
-- **Cookie expiry = 3 hours:** Sessions are intentionally short-lived for security in a healthcare context.
+- **Vite over CRA:** Faster dev server and builds than the doctor app (`sos`).
+- **Bearer token + cookies:** Token stored in cookie; sent as `Authorization` header on every request.
+- **Jit.si for video:** Open-source, no account needed. Room name = appointment ID.
+- **Ant Design:** All UI components for fast, consistent development.
+- **3-hour cookie expiry:** Short-lived sessions for security in a healthcare context.
