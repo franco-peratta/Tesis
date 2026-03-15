@@ -5,7 +5,6 @@ import {
 import { Space, Typography, Divider, Button, Modal } from "antd"
 import moment from "moment"
 import { updateEMR } from "../EMR/Handler"
-import { EmrType } from "../EMR/model"
 import { Patient } from "../Patient/model"
 import { useNavigate } from "react-router-dom"
 import { EMR } from "../EMR"
@@ -137,7 +136,8 @@ type ModalProps = {
 }
 
 const EmrModal = ({ visible, patient, onOk, onCancel }: ModalProps) => {
-  const [emr, setEmrValue] = useState(patient.emr)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [emr, _setEmrValue] = useState(patient.emr)
 
   const changeEmr = (emr: string) => {
     updateEMR(patient.id, emr)

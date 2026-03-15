@@ -48,16 +48,6 @@ export const Videocall = () => {
     console.log("PARTICIPANT LEFT")
   }
 
-  const setPatientInfo = (patientInfo) => {
-    setAppointment((prev) => ({
-      ...prev,
-      patient: {
-        ...prev.patient,
-        ...patientInfo
-      }
-    }))
-  }
-
   // displayName no estaria funcionando
   // password funciona para el paciente SOLO si el medico se metio antes
   const { roomName, displayName, password } = {
