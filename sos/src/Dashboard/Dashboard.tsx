@@ -11,6 +11,8 @@ import {
 import { getStats } from './Handler';
 import { Stats } from './types';
 import { AnimatedStatistic } from './AnimatedStatistic';
+import { Bubble } from '../components/Bubble';
+import { Loader } from '../components/Loader';
 
 const { Title } = Typography;
 
@@ -33,10 +35,7 @@ export const Dashboard = () => {
     fetchStats();
   }, [setData]);
 
-  if (isLoading) {
-    return <div>Cargando...</div>;
-  }
-
+  if (isLoading) return <Loader />;
   if (!data) {
     return <div>Error...</div>;
   }
@@ -53,14 +52,14 @@ export const Dashboard = () => {
   } = data;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%' }}>
-      <Title level={2} style={{ padding: '0 24px 12px 24px' }}>Dashboard</Title>
+    <Bubble>
+      <Title>Dashboard</Title>
       <div
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
           gap: "1rem",
-          padding: '0 24px 24px 24px',
+          marginBottom: "1rem",
         }}
       >
         <StatCard
@@ -108,7 +107,7 @@ export const Dashboard = () => {
           color="#ec4899"
         />
       </div>
-      <div style={{ padding: "0 24px 0 24px" }}>
+      <div>
         <Card title="Estado de turnos" bordered={false} style={{}}>
           <p style={{ color: "rgba(0,0,0,0.45)", marginBottom: "1rem" }}>
             Métricas de los turnos
@@ -148,7 +147,7 @@ export const Dashboard = () => {
           </div>
         </Card>
       </div>
-    </div>
+    </Bubble>
   );
 };
 
