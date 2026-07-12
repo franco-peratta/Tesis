@@ -1,0 +1,42 @@
+flowchart TB
+    M(["👨‍⚕️ Médico"])
+    P(["🧑 Paciente"])
+
+    subgraph VERCEL["☁️  Vercel — hosting de frontends"]
+        AppM["<b>App del Médico</b><br/>React + TypeScript + Ant Design<br/><i>medicos.saludonlinesolidaria.com</i>"]
+        AppP["<b>App del Paciente</b><br/>React + TypeScript + Vite<br/><i>paciente.saludonlinesolidaria.com</i>"]
+    end
+
+    subgraph RENDER["☁️  Render — hosting del backend"]
+        direction TB
+        API["<b>REST API</b><br/>Node.js + Express + TypeScript<br/><i>saludonlinesolidaria.com/api/v1</i>"]
+        PRISMA["Prisma ORM"]
+        DB[("SQLite")]
+        API --> PRISMA --> DB
+    end
+
+    JITSI["<b>Jitsi Meet</b> · meet.jit.si<br/>(videollamadas)"]
+    GMAIL["<b>Gmail</b> · Nodemailer<br/>(emails de confirmación de turnos)"]
+    GH["<b>GitHub</b><br/>control de versiones y<br/>despliegue continuo"]
+
+    M --> AppM
+    P --> AppP
+
+    AppM -- "HTTPS · JWT" --> API
+    AppP -- "HTTPS · JWT" --> API
+
+    AppM -- "videollamada embebida<br/>(External API)" --> JITSI
+    AppP -- "acceso a la sala<br/>(meet.jit.si/id-del-turno)" --> JITSI
+
+    API -- "envío de emails" --> GMAIL
+
+    GH -.-> AppM
+    GH -.-> AppP
+    GH -.-> API
+
+    style VERCEL fill:#f5f9ff,stroke:#4a90d9
+    style RENDER fill:#f5fff7,stroke:#46a758
+    style JITSI fill:#fffbf0,stroke:#d9a54a
+    style GMAIL fill:#fffbf0,stroke:#d9a54a
+    style GH fill:#f6f6f6,stroke:#888
+    style DB fill:#e8f4ea
