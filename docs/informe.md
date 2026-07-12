@@ -346,7 +346,28 @@ CA-24 — Adaptación a dispositivos móviles. Se verificó la visualización en
 
 La telemedicina impulsada por la Medicina 4.0 ha sido una habilitadora clave para la medicina solidaria, mejorando significativamente la eficiencia del sistema de salud al reducir costos asociados con la atención médica tradicional y disminuir la necesidad de desplazamientos físicos. Esto ha permitido que SOS brinde servicios de atención médica accesibles, eficientes y de alta calidad, superando barreras geográficas y de acceso. Además, ha aumentado la capacidad de los profesionales de la salud para atender a un mayor número de pacientes en un tiempo más corto, mejorando la productividad y la capacidad de respuesta del sistema en general.
 
-ESTO QUE SE HIZO SE COMPARA CON LO OTRO…
+### Comparación con las soluciones existentes
+
+Para dimensionar el aporte del sistema desarrollado, resulta pertinente contrastarlo con las plataformas analizadas en la sección de Antecedentes. La siguiente tabla resume la comparación según los criterios más relevantes para el perfil de usuario que atiende SOS:
+
+| Criterio | **SOS** | Solo™ (Teladoc) | Cam Doctor (Medifé) | E-Consulta (Swiss Medical) | DOC24 | Teleconsultas BA | ÜMA |
+|---|---|---|---|---|---|---|---|
+| **Costo para el paciente** | Gratuito | Licencia empresarial (precio no público) | Incluido en la prepaga | Incluido en la prepaga | Según entidad contratante | Gratuito | Suscripción mensual paga |
+| **Requisito de acceso** | Solo registrarse | Contratación institucional | Afiliación a Medifé | Afiliación a Swiss Medical | Pertenecer a una entidad cliente | Residir en CABA | Pago de suscripción |
+| **Alcance geográfico** | Todo el país | Global | Argentina | Argentina | Argentina, Brasil y México | Ciudad de Buenos Aires | Argentina |
+| **Orientación** | Paciente individual, sin fines de lucro | B2B / instituciones de salud | Afiliados de prepaga | Afiliados de prepaga | B2B / white-label | Sistema público | Paciente individual, comercial |
+| **Solicitud de turnos** | Autogestionada en la app | Según institución | Desde la app | Desde la app | Según entidad | Telefónica (147), con operador | Desde la app |
+| **Historia clínica integrada** | Sí (texto libre editable) | Sí (interoperabilidad EHR) | Parcial (compartir documentos) | No especificada | Sí | Sistema público | Sí (historial centralizado) |
+| **Código abierto** | Sí | No | No | No | No | No | No |
+| **Viabilidad para un fin solidario** | — | Nula | Baja | Nula | Nula | Alta, pero acotada | Nula |
+
+De la comparación surgen tres observaciones centrales.
+
+En primer lugar, ninguna de las plataformas comerciales analizadas —Solo™, Cam Doctor, E-Consulta, DOC24 y ÜMA— es accesible para el perfil de paciente que atiende SOS: todas condicionan el acceso al pago de una prepaga, una suscripción o una contratación institucional. Esto confirma lo señalado en los Antecedentes: el sector privado ha capitalizado la telemedicina, pero ha dejado vacante el espacio de la atención virtual gratuita para los sectores vulnerables. El sistema desarrollado ocupa precisamente ese espacio.
+
+En segundo lugar, el único antecedente comparable en espíritu, Teleconsultas BA, presenta dos limitaciones que SOS supera: su alcance está circunscrito a la Ciudad de Buenos Aires, mientras que SOS puede atender pacientes de cualquier punto del país; y su solicitud de turnos depende de un operador telefónico en horarios acotados, mientras que en SOS el paciente gestiona sus turnos de manera autónoma desde la aplicación, en cualquier momento y sin intermediarios —resolviendo, además, el mismo cuello de botella administrativo que presentaba el proceso manual original de la organización—.
+
+En tercer lugar, SOS es la única de las plataformas comparadas construida íntegramente con tecnologías de código abierto y servicios gratuitos, lo que garantiza que su operación no dependa de un presupuesto que la organización no posee. Esta decisión de diseño es la que hace sostenible el modelo solidario. Corresponde señalar, no obstante, la contracara honesta de esta comparación: las plataformas comerciales superan ampliamente a SOS en madurez, robustez de infraestructura, variedad de funcionalidades y equipos de desarrollo dedicados. SOS no compite con ellas —ni pretende hacerlo—; su valor reside en atender a quienes esas plataformas, por su propio modelo de negocio, dejan afuera.
 
 La colaboración con los actores clave ha sido fundamental para hacer todo esto posible.
 
@@ -531,7 +552,7 @@ Medicina 4.0
 ### FASE 3 — REDACCIÓN
 
 - [x] Escenarios de uso concretos paso a paso (sección "Escenarios de uso": paciente rural, consulta pediátrica con seguimiento, incorporación de médica voluntaria)
-- [ ] Conclusiones: Completar la comparación con las otras soluciones del mercado (tabla comparativa SOS vs. Solo™ / Cam Doctor / E-Consulta / DOC24 / Teleconsultas BA / ÜMA)
+- [x] Conclusiones: Comparación con las otras soluciones del mercado (tabla comparativa + tres observaciones centrales)
 - [x] Trabajo a Futuro: redactar sección completa
 - [ ] Completar referencias faltantes: E-Consulta, DOC24, Teleconsultas BA, ÜMA, Jitsi, Prisma
 
