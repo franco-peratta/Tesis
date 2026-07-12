@@ -509,21 +509,7 @@ Médico 4 — Ginecología
 
 # Referencias
 
-Solo:
-
-<https://intouchhealth.com/virtual-care-platform/solo/>
-
-<https://business.teladochealth.com/platform/>
-
-Medife Cam Doctor
-
-<https://www.medife.com.ar/informacion/terminos>
-
-<https://medife.com.ar/preguntas-frecuentes-cam-doctor>
-
-<https://www.medife.com.ar/noticias/cam-doctor-developed-with-google-cloud>
-
-Medicina 4.0
+**Medicina 4.0**
 
 <https://www.researchgate.net/publication/319607033_Medicine_40>
 
@@ -532,6 +518,82 @@ Medicina 4.0
 <https://www.deutschland.de/es/topic/economia/medicina-40-en-alemania-digitalizacion-e-inteligencia-artificial>
 
 <https://www.youtube.com/watch?v=0SSWxbAmCxg>
+
+**Plataformas analizadas en Antecedentes**
+
+Solo™ (Teladoc Health):
+
+<https://intouchhealth.com/virtual-care-platform/solo/>
+
+<https://business.teladochealth.com/platform/>
+
+Cam Doctor (Medifé):
+
+<https://camdoctor.medife.com.ar/>
+
+<https://www.medife.com.ar/informacion/terminos>
+
+<https://medife.com.ar/preguntas-frecuentes-cam-doctor>
+
+<https://www.medife.com.ar/noticias/cam-doctor-developed-with-google-cloud>
+
+E-Consulta (Swiss Medical Group):
+
+<https://www.swissmedical.com.ar/prepagaclientes/novedades/articulos/2018/08/08/e-consulta-tu-medico-en-linea/>
+
+DOC24:
+
+<https://www.doc24.com.ar/>
+
+Teleconsultas BA (GCBA):
+
+<https://buenosaires.gob.ar/teleconsultas>
+
+ÜMA Salud:
+
+<https://umasalud.com/>
+
+<https://umasalud.com/suscripciones>
+
+**Tecnologías utilizadas en la implementación**
+
+React: <https://react.dev/>
+
+TypeScript: <https://www.typescriptlang.org/>
+
+Node.js: <https://nodejs.org/>
+
+Express: <https://expressjs.com/>
+
+Prisma ORM: <https://www.prisma.io/docs>
+
+SQLite: <https://www.sqlite.org/>
+
+Jitsi Meet (proyecto de código abierto): <https://jitsi.org/> — <https://github.com/jitsi/jitsi-meet>
+
+Jitsi Meet External API (integración embebida): <https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-iframe/>
+
+Nodemailer: <https://nodemailer.com/>
+
+Vite: <https://vitejs.dev/>
+
+Ant Design: <https://ant.design/>
+
+**Hosting y servicios en la nube**
+
+Vercel: <https://vercel.com/docs>
+
+Render: <https://render.com/docs>
+
+PlanetScale — anuncio de la eliminación del plan gratuito (2024): <https://planetscale.com/blog/planetscale-forever>
+
+Litestream (replicación de SQLite): <https://litestream.io/>
+
+**Marco normativo**
+
+Ley N° 25.326 de Protección de los Datos Personales: <https://servicios.infoleg.gob.ar/infolegInternet/anexos/60000-64999/64790/norma.htm>
+
+Ley N° 27.553 de Recetas Electrónicas o Digitales: <https://www.argentina.gob.ar/normativa/nacional/ley-27553-340919>
 
 ---
 
@@ -554,7 +616,7 @@ Medicina 4.0
 - [x] Escenarios de uso concretos paso a paso (sección "Escenarios de uso": paciente rural, consulta pediátrica con seguimiento, incorporación de médica voluntaria)
 - [x] Conclusiones: Comparación con las otras soluciones del mercado (tabla comparativa + tres observaciones centrales)
 - [x] Trabajo a Futuro: redactar sección completa
-- [ ] Completar referencias faltantes: E-Consulta, DOC24, Teleconsultas BA, ÜMA, Jitsi, Prisma
+- [x] Referencias completas y organizadas por categoría (plataformas, tecnologías, hosting, marco normativo) — links de leyes y PlanetScale verificados
 
 ### FASE 4 — DEPENDEN DE TERCEROS (arrancar ya, tienen demora)
 
