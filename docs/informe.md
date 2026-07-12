@@ -218,6 +218,48 @@ En la app del paciente se utilizó **Vitest**, el framework de testing nativo de
 
 Además de los procesos de testing, la organización SOS implementará una estrategia de retroalimentación continua para recopilar comentarios de pacientes y médicos sobre la usabilidad y el rendimiento del sistema. Estos comentarios se tendrán en cuenta para realizar mejoras iterativas y continuar optimizando la plataforma.
 
+# Escenarios de uso
+
+Para ilustrar de manera concreta cómo el sistema resuelve las necesidades de los usuarios de SOS, a continuación se desarrollan tres escenarios de uso representativos. Cada uno describe, paso a paso, cómo una situación real se resuelve con la plataforma, contrastando —cuando resulta pertinente— con el proceso manual que la organización utilizaba anteriormente.
+
+### Escenario 1: Una paciente de zona rural necesita una consulta de clínica médica
+
+María tiene 67 años, está jubilada y vive en una localidad rural a 80 kilómetros de Bahía Blanca. Desde hace unos días tiene un dolor persistente en las articulaciones, pero el centro de salud más cercano queda a una hora de viaje y no consigue turno con un clínico hasta dentro de varias semanas. Su hija le comenta que existe Salud Online Solidaria y le comparte el enlace de la plataforma.
+
+1. María ingresa a la app de pacientes desde su celular y, al no tener cuenta, selecciona la opción **"Registrarse"**. Completa sus datos personales —nombre, DNI, fecha de nacimiento y teléfono—, su correo electrónico y una contraseña. El registro es inmediato y sin intermediarios: no necesita esperar a que un administrador la contacte por WhatsApp, como ocurría en el proceso manual original.
+2. Ya dentro de la aplicación, María accede a **"Nuevo turno"**. El sistema le muestra la lista de médicos voluntarios; selecciona una médica de clínica médica.
+3. Al elegir la fecha, el calendario le deshabilita automáticamente los días en que la médica no atiende, de acuerdo con los horarios de atención que la profesional configuró en su perfil. María elige el jueves siguiente, y el sistema le ofrece únicamente los horarios libres de ese día —los horarios ya reservados por otros pacientes quedan excluidos automáticamente—. Selecciona las 10:30 y confirma.
+4. Al instante, María recibe en su correo un **email de confirmación** con los datos de la consulta: médica, fecha y horario. El turno queda registrado con estado "espera" y visible tanto en su app como en la de la médica.
+5. El jueves a las 10:30, María abre su app, accede al turno y presiona el botón para unirse a la **videollamada**. Se abre la sala de Jitsi Meet en su navegador, sin necesidad de instalar ninguna aplicación adicional. La médica ya se encuentra en la sala, habiendo iniciado la llamada desde su propia app.
+6. Durante la consulta, mientras conversan por video, la médica registra las observaciones en la **historia clínica electrónica** de María desde el panel lateral de su aplicación. Al finalizar, marca el turno como "terminado".
+
+María resolvió su consulta sin viajar, sin costo alguno y sin depender de la disponibilidad de un administrador que coordinara el encuentro. Su historia clínica queda registrada en el sistema para futuras consultas.
+
+### Escenario 2: Un padre necesita una consulta pediátrica para su hijo, con seguimiento
+
+Jorge es empleado de comercio y padre de Tomás, de 5 años, que presenta fiebre y una erupción en la piel. La obra social de Jorge dejó de cubrir la cartilla pediátrica de su zona y el turno más próximo en el hospital público es en tres semanas. Jorge ya utilizó SOS anteriormente, por lo que tiene una cuenta registrada.
+
+1. Jorge inicia sesión en la app de pacientes con su correo y contraseña. En la pantalla principal ve el historial de sus turnos anteriores con sus estados.
+2. Accede a **"Nuevo turno"**, selecciona un pediatra de la lista de médicos voluntarios, elige el primer día disponible y uno de los horarios libres que el sistema le ofrece. Confirma el turno y recibe el email de confirmación correspondiente.
+3. En el horario acordado, Jorge se une a la videollamada desde el celular junto a Tomás. El pediatra observa la erupción a través de la cámara, hace preguntas y da indicaciones de cuidado y medicación de venta libre.
+4. El pediatra considera necesario controlar la evolución en una semana. Sin salir de la consulta, desde su propia app crea el **turno de seguimiento**: el sistema lo asigna automáticamente a él como médico —una de las mejoras incorporadas a partir del beta testing— y solo debe seleccionar el día y horario con Jorge. El nuevo turno genera su propio email de confirmación.
+5. El pediatra registra en la historia clínica de Tomás el motivo de consulta, las observaciones y las indicaciones, utilizando el editor de texto libre para darle el formato que le resulta más cómodo. Marca el turno como "terminado".
+6. Una semana después, la consulta de seguimiento se realiza por el mismo mecanismo, y el pediatra tiene a la vista las notas de la consulta anterior en la historia clínica de Tomás.
+
+El seguimiento —uno de los puntos débiles del proceso manual, donde cada nueva consulta requería reiniciar la coordinación por mensajería— queda resuelto en menos de un minuto durante la propia consulta.
+
+### Escenario 3: Una médica voluntaria se incorpora a la organización
+
+Laura es médica clínica en Bahía Blanca y dispone de algunas horas semanales para colaborar con SOS. La organización la registra en el sistema y Laura recibe sus credenciales de acceso.
+
+1. Laura inicia sesión en la **app de médicos** y lo primero que ve es el **dashboard** con las estadísticas generales del sistema: cantidad de pacientes registrados, turnos por estado y médicos activos.
+2. Antes de poder recibir turnos, accede a su **perfil** y configura sus **horarios de atención**: define que atenderá lunes y jueves de 18 a 20 h. A partir de ese momento, esos son los únicos horarios que el sistema ofrecerá a los pacientes que quieran atenderse con ella; no necesita comunicar su disponibilidad a ningún administrador ni mantenerla actualizada por fuera del sistema.
+3. Días después, una paciente reserva un turno con ella. El turno aparece en la sección **"Turnos"** de su app, con estado "espera", donde Laura puede filtrarlo y consultarlo junto al resto de su agenda.
+4. Llegado el horario, Laura accede al turno e inicia la **videollamada**, que se abre embebida dentro de su propia aplicación. Mientras atiende, consulta y edita la historia clínica de la paciente desde el panel lateral, sin cambiar de pantalla.
+5. Al terminar, marca el turno como "terminado". Si necesita revisar el caso más adelante, puede acceder a la ficha de la paciente desde la sección **"Pacientes"**, donde encuentra sus datos personales y toda su historia clínica.
+
+Para la organización, la incorporación de Laura no agregó carga administrativa: su disponibilidad, sus turnos y sus pacientes se gestionan íntegramente dentro del sistema.
+
 # Pruebas
 
 Se realizaron pruebas exhaustivas para evaluar la implementación de la aplicación y asegurar su adecuado funcionamiento con los usuarios, tanto médicos como pacientes. Se llevó a cabo un proceso de pruebas de usabilidad y pruebas beta con un grupo seleccionado de usuarios representativos. Los principales objetivos de estas pruebas fueron validar la facilidad de uso, la eficacia y la satisfacción general del sistema.
@@ -488,7 +530,7 @@ Medicina 4.0
 
 ### FASE 3 — REDACCIÓN
 
-- [ ] Escenarios de uso concretos paso a paso (2-3). Ej: "El señor X necesita una consulta pediátrica — así se resuelve con el sistema"
+- [x] Escenarios de uso concretos paso a paso (sección "Escenarios de uso": paciente rural, consulta pediátrica con seguimiento, incorporación de médica voluntaria)
 - [ ] Conclusiones: Completar la comparación con las otras soluciones del mercado (tabla comparativa SOS vs. Solo™ / Cam Doctor / E-Consulta / DOC24 / Teleconsultas BA / ÜMA)
 - [x] Trabajo a Futuro: redactar sección completa
 - [ ] Completar referencias faltantes: E-Consulta, DOC24, Teleconsultas BA, ÜMA, Jitsi, Prisma
