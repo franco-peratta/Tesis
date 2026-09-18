@@ -47,3 +47,27 @@ export async function auth(
 		res.status(401).send({ error: "Authentication failed" })
 	}
 }
+
+/**
+ * Restringe la ruta al propio usuario autenticado. Mientras no exista un rol
+ * de administrador, nadie tiene motivo para leer ni modificar la cuenta de
+ * otro: sin esta comprobación, cualquier usuario logueado podía operar sobre
+ * cualquier otro con solo cambiar el id de la URL.
+ */
+export function requireSelf(
+	req: Request & { user?: User },
+	res: Response,
+	next: NextFunction
+) {
+	const targetId = parseInt(req.params.id)
+
+	if (isNaN(targetId)) {
+		return res.status(400).send({ error: "Id de usuario inválido" })
+	}
+
+	if (!req.user || req.user.id !== targetId) {
+		return res.status(403).send({ error: "No autorizado" })
+	}
+
+	next()
+}

@@ -144,6 +144,10 @@ PORT=3000
 # Email (use a Gmail App Password)
 EMAIL_ADDRESS=your-gmail@gmail.com
 EMAIL_PASSWORD=your-app-password
+
+# Initial password for patients created by a provider (that form does not ask
+# for one). Required: patient creation fails without it.
+DEFAULT_PATIENT_PASSWORD=change-this-password
 ```
 
 ---
