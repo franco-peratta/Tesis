@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Button, Space } from 'antd';
-import { SaveOutlined, EditOutlined } from "@ant-design/icons";
+import React, { useEffect, useState } from 'react';
+import { Button, Space, Tooltip } from 'antd';
+import { SaveOutlined, EditOutlined, FileAddOutlined } from "@ant-design/icons";
 import MarkdownEditor from 'react-markdown-editor-lite';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -77,9 +77,20 @@ export const EmrComponent: React.FC<EMRProps> = ({ initialMarkdown, onSave }) =>
     const [markdown, setMarkdown] = useState(initialMarkdown);
     const [viewMode, setViewMode] = useState<'preview' | 'edit'>('preview');
 
+    // Vuelve a leer la historia clinica cuando el contenedor la actualiza (por
+    // ejemplo, despues de guardar). Sin esto el editor se quedaba con el texto
+    // capturado al montarse: al reabrir el panel durante la videollamada se
+    // veia la version anterior, y volver a guardar desde ahi sobreescribia la
+    // historia con contenido viejo.
+    useEffect(() => {
+        setMarkdown(initialMarkdown);
+    }, [initialMarkdown]);
+
     const handleEditorChange = ({ text }: { text: string }) => {
         setMarkdown(text);
     };
+
+    const isEmpty = markdown.trim().length === 0;
 
     const getEditorView = () => {
         return viewMode === 'preview'
@@ -90,12 +101,32 @@ export const EmrComponent: React.FC<EMRProps> = ({ initialMarkdown, onSave }) =>
     return (
         <div className="markdown-editor p-4 border rounded shadow bg-white">
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1em' }}>
-                <Button
-                    icon={viewMode === 'edit' ? <EditOutlined /> : <EditOutlined rotate={90} />}
-                    onClick={() => setViewMode(viewMode === 'edit' ? 'preview' : 'edit')}
-                >
-                    {viewMode === 'edit' ? 'Vista previa' : 'Editar'}
-                </Button>
+                <Space direction="horizontal">
+                    <Tooltip
+                        title={
+                            isEmpty
+                                ? 'Carga una estructura base (datos del paciente, antecedentes, evolución) que podés editar libremente'
+                                : 'La plantilla se puede insertar solo cuando la historia clínica está vacía, para no sobreescribir lo ya cargado'
+                        }
+                    >
+                        <Button
+                            icon={<FileAddOutlined />}
+                            disabled={!isEmpty}
+                            onClick={() => {
+                                setMarkdown(clinicalRecordTemplate);
+                                setViewMode('edit');
+                            }}
+                        >
+                            Insertar plantilla
+                        </Button>
+                    </Tooltip>
+                    <Button
+                        icon={viewMode === 'edit' ? <EditOutlined /> : <EditOutlined rotate={90} />}
+                        onClick={() => setViewMode(viewMode === 'edit' ? 'preview' : 'edit')}
+                    >
+                        {viewMode === 'edit' ? 'Vista previa' : 'Editar'}
+                    </Button>
+                </Space>
             </div>
             <MarkdownEditor
                 key={viewMode} // <-- this forces re-mount when viewMode changes

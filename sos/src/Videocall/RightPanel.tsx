@@ -136,12 +136,15 @@ type ModalProps = {
 }
 
 const EmrModal = ({ visible, patient, onOk, onCancel }: ModalProps) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [emr, _setEmrValue] = useState(patient.emr)
+  const [emr, setEmrValue] = useState(patient.emr)
 
-  const changeEmr = (emr: string) => {
-    updateEMR(patient.id, emr)
+  const changeEmr = (newEmr: string) => {
+    updateEMR(patient.id, newEmr)
       .then((res) => {
+        // El modal queda montado entre aperturas, asi que hay que reflejar lo
+        // guardado en el estado local: de lo contrario, al reabrir el panel se
+        // mostraba la version previa de la historia clinica.
+        setEmrValue(res.data.emr)
         successNotification("Historia clinica actualizada con exito")
       })
       .catch((e) => {

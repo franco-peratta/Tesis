@@ -41,6 +41,9 @@ se unificó acá para no tener dos listas que se contradigan.
 - [ ] Cachear los http request del dashboard
 - [ ] Reset password. Hoy es manual, y mientras no exista los pacientes se
       quedan con la password inicial que les asigna el alta.
+- [ ] Guía rápida de uso integrada en la app del médico, para quienes tienen
+      menos familiaridad con la tecnología.
+- [ ] Paginar los listados de pacientes y turnos. Toca backend y frontend.
 
 ---
 
@@ -114,6 +117,16 @@ se unificó acá para no tener dos listas que se contradigan.
       promoverse a médico), se arregló la baja (fallaba con P2003 sin borrar
       nada y respondía dos veces) y la password inicial de pacientes salió del
       código al entorno. Tests del backend: de 9 a 23 casos.
+
+- [x] Bug de historia clínica desactualizada en el panel de la videollamada
+      (PR #5). El editor conservaba el texto capturado al montarse: al reabrir
+      el panel se veía la versión anterior y volver a guardar desde ahí
+      sobreescribía la historia con contenido viejo. Con test de regresión.
+- [x] Plantilla de historia clínica accesible con un botón explícito (PR #5).
+      Ya existía en el código, pero se aplicaba sola al guardar una historia
+      vacía, así que nunca se veía como opción.
+- [x] Configuración de horarios más clara (PR #5): texto explicativo, botones
+      etiquetados, límite de franjas visible y días sin franjas diferenciados.
 
 ### Informe — consistencia informe ↔ código
 

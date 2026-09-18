@@ -13,7 +13,9 @@ import type { Moment } from "moment"
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons"
 import { Provider, Shifts } from "./Model"
 
-const { Title } = Typography
+const { Title, Paragraph, Text } = Typography
+
+const MAX_SHIFTS_PER_DAY = 4
 
 type Day =
   | "monday"
@@ -49,7 +51,7 @@ export const HoursOfOperations = ({ user, setShifts }: Props) => {
   }
 
   const addShift = (day: Day) => {
-    if (user_shifts[day].shifts.length > 3) return
+    if (user_shifts[day].shifts.length >= MAX_SHIFTS_PER_DAY) return
     const newShifts = { ...user_shifts }
     newShifts[day].shifts.push({ from: 0, to: 0 })
     setShifts(newShifts)
@@ -64,6 +66,18 @@ export const HoursOfOperations = ({ user, setShifts }: Props) => {
   return (
     <>
       <Title>Horario</Title>
+      <Paragraph type="secondary" style={{ maxWidth: "48em" }}>
+        Estos son los días y las franjas en los que vas a estar disponible para
+        atender. Los pacientes solo pueden solicitar turnos dentro de las
+        franjas que definas acá.
+      </Paragraph>
+      <Paragraph type="secondary" style={{ maxWidth: "48em" }}>
+        Tildá el día para habilitarlo y elegí desde qué hora hasta qué hora
+        atendés. Podés agregar hasta {MAX_SHIFTS_PER_DAY} franjas por día, por
+        ejemplo una a la mañana y otra a la tarde. Los horarios se toman por
+        hora completa: si elegís 9, el primer turno del día arranca a las 9:00.
+      </Paragraph>
+      <Divider />
       {days.map((day) => (
         <div key={`key-${day.key}`}>
           <Row style={{ marginBottom: "1em" }}>
@@ -91,25 +105,34 @@ export const HoursOfOperations = ({ user, setShifts }: Props) => {
                   </div>
                 ))}
                 {user_shifts[day.key].shifts.length === 0 && (
-                  <div>Sin horarios</div>
+                  <Text type="secondary">
+                    {user_shifts[day.key].available
+                      ? "Sin franjas todavía: agregá una para poder recibir turnos este día"
+                      : "Día no disponible"}
+                  </Text>
                 )}
               </Space>
             </Col>
-            <Col span={3}>
+            <Col span={6}>
               <Button
                 type="text"
+                icon={<PlusOutlined />}
                 onClick={() => addShift(day.key)}
-                disabled={!user_shifts[day.key].available}
+                disabled={
+                  !user_shifts[day.key].available ||
+                  user_shifts[day.key].shifts.length >= MAX_SHIFTS_PER_DAY
+                }
               >
-                <PlusOutlined />
+                Agregar franja
               </Button>
               {user_shifts[day.key].shifts.length > 1 ? (
                 <Button
                   type="text"
+                  icon={<DeleteOutlined />}
                   onClick={() => deleteShift(day.key)}
                   disabled={!user_shifts[day.key].available}
                 >
-                  <DeleteOutlined />
+                  Quitar última
                 </Button>
               ) : null}
             </Col>
