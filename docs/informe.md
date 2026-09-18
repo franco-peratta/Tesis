@@ -401,11 +401,10 @@ Como se documentó en el caso de prueba CA-24, la app del paciente se adapta raz
 
 **Funcionalidades surgidas de la retroalimentación de los médicos**
 
-La encuesta realizada durante el beta testing arrojó pedidos concretos que constituyen candidatos naturales para próximas versiones:
+La encuesta realizada durante el beta testing arrojó pedidos concretos. Tres de ellos se implementaron antes de cerrar esta etapa y se detallan en la sección "Cambios implementados a partir de la retroalimentación"; los que se enumeran a continuación quedan como candidatos naturales para próximas versiones, ya sea por su alcance técnico o por requerir análisis previo:
 
 - **Adjuntos en la historia clínica:** posibilidad de incorporar archivos e imágenes —resultados de laboratorio, estudios de diagnóstico por imágenes— a la historia clínica electrónica del paciente. Requiere incorporar un servicio de almacenamiento de archivos.
 - **Recetas digitales:** emisión de recetas directamente desde la plataforma. Esta funcionalidad requiere un análisis normativo previo, ya que en Argentina las recetas electrónicas están reguladas por la Ley N° 27.553 y exigen firma digital y registro en plataformas habilitadas.
-- **Plantillas de historia clínica:** si bien el formato de texto libre fue el preferido por los médicos, uno de ellos sugirió ofrecer plantillas mínimas opcionales como punto de partida, lo que facilitaría la adopción sin sacrificar la flexibilidad.
 - **Guía de uso integrada:** un tutorial o guía rápida dentro de la propia aplicación, orientada a médicos con menor familiaridad con la tecnología.
 
 **Recordatorios y nuevas notificaciones**
@@ -438,6 +437,9 @@ En síntesis, quien continúe este proyecto debería priorizar, en este orden: l
 ( ) Parcialmente clara o incompleta
 ( ) No, falta información o es confusa
 
+**2.b. Si respondiste que falta información o resulta confusa, ¿qué información agregarías o cambiarías?**
+*Respuesta abierta:*
+
 **3. ¿Qué tan sencillo te resultó crear turnos y gestionarlos desde el listado de turnos?**
 ( ) Muy sencillo
 ( ) Sencillo
@@ -445,24 +447,41 @@ En síntesis, quien continúe este proyecto debería priorizar, en este orden: l
 ( ) Complicado
 ( ) Muy complicado
 
-**4. ¿Cómo fue tu experiencia con la videollamada y con la edición de la historia clínica desde el panel lateral durante la consulta?**
-( ) Sí, todo funcionó correctamente
-( ) Sí, pero con dificultades técnicas o con el editor de historia clínica
+**4. ¿Cómo fue tu experiencia con la videollamada?**
+( ) Se inició y funcionó correctamente
+( ) Se inició, pero con dificultades técnicas (audio, video o conexión)
 ( ) No pude iniciarla
 
-**5. ¿Pudiste establecer correctamente tus horarios disponibles desde tu perfil?**
+**5. ¿Cómo fue tu experiencia editando la historia clínica desde el panel lateral durante la consulta?**
+( ) Pude editarla y guardar los cambios sin problemas
+( ) Pude editarla, pero tuve dificultades para guardar los cambios
+( ) El editor me resultó confuso o incómodo de usar
+( ) No pude usarlo
+
+**6. ¿Pudiste establecer correctamente tus horarios disponibles desde tu perfil?**
 ( ) Sí, sin inconvenientes
 ( ) Sí, pero fue confuso
 ( ) No pude hacerlo
 
-**6. En general, ¿cómo calificarías tu experiencia con la app?**
+**6.b. Si te resultó confuso, ¿qué parte de la configuración de horarios no quedó clara?**
+*Respuesta abierta:*
+
+**7. En general, ¿cómo calificarías tu experiencia con la app?**
 ( ) Excelente
 ( ) Buena
 ( ) Regular
 ( ) Mala
 ( ) Muy mala
 
-**7. ¿Hay alguna funcionalidad que consideres necesaria y que no esté incluida actualmente?**
+**8. ¿En qué dispositivo usaste principalmente la app?**
+( ) Computadora de escritorio o notebook
+( ) Celular
+( ) Tablet
+
+**9. ¿Hay alguna funcionalidad que consideres necesaria y que no esté incluida actualmente?**
+*Respuesta abierta:*
+
+**10. Si tuvieras que elegir una sola mejora para que la implementemos primero, ¿cuál sería y por qué?**
 *Respuesta abierta:*
 
 ### Resultados de la Encuesta
@@ -506,6 +525,30 @@ Médico 4 — Ginecología
 5. Sí, sin inconvenientes
 6. Buena
 7. La navegación entre pacientes y turnos se vuelve algo lenta cuando hay muchas citas cargadas. También sería muy útil poder emitir recetas digitales directamente desde la plataforma, ya que hoy en día es algo que los pacientes valoran mucho.
+
+### Cambios implementados a partir de la retroalimentación
+
+La retroalimentación recogida no se limitó a alimentar la lista de mejoras futuras: tres de los señalamientos se tradujeron en cambios concretos sobre el sistema antes de cerrar esta etapa. Se describen a continuación, junto con la causa técnica que los originó, porque ilustran el valor de someter el sistema a uso real antes de darlo por terminado.
+
+**1. Historia clínica desactualizada al reabrir el panel de la videollamada**
+
+Al revisar el panel lateral que permite editar la historia clínica durante la consulta se detectó un defecto en el manejo del estado de la interfaz. El componente que contiene el editor permanece montado entre aperturas del panel, de modo que conservaba el contenido capturado en el primer montaje: el editor no volvía a leer la historia clínica cuando esta se actualizaba. El efecto era que, tras guardar correctamente —la operación sobre el servidor sí se completaba— al cerrar y reabrir el panel se mostraba la versión anterior del documento, dando la impresión de que los cambios se habían perdido.
+
+La consecuencia más grave no era esa confusión sino la siguiente: si el profesional volvía a guardar desde esa vista desactualizada, se persistía el contenido viejo sobre el nuevo, con la pérdida efectiva de lo que había registrado. Tratándose de una historia clínica, el riesgo justificaba una corrección inmediata.
+
+La solución tuvo dos partes: el panel de la videollamada ahora refleja en su estado local la historia clínica devuelta por el servidor después de guardar, y el componente del editor vuelve a leer el documento cuando el contenedor lo actualiza, conservando a la vez lo que el profesional esté escribiendo en ese momento. Se incorporaron pruebas automatizadas que cubren ambos comportamientos y que fallan si el defecto reaparece.
+
+**2. Plantilla de historia clínica accesible**
+
+El formato de texto libre fue el preferido, pero se señaló que un punto de partida ayudaría a organizar el registro las primeras veces. El sistema ya contaba con una plantilla —con datos del paciente, antecedentes, evolución y pendientes—, pero se aplicaba de manera implícita: solo se insertaba al guardar una historia clínica vacía, por lo que el profesional nunca la veía ofrecida como opción.
+
+El cambio consistió en exponerla mediante un botón explícito de inserción, habilitado únicamente cuando la historia clínica está vacía. Esa restricción es deliberada: evita que la plantilla sobreescriba contenido ya registrado, y mantiene la flexibilidad del texto libre para quien prefiera no usarla.
+
+**3. Configuración de horarios más clara**
+
+La definición de los horarios de atención resultó la pantalla menos intuitiva. La interfaz presentaba los controles sin explicar qué representaban las franjas ni cómo se relacionaban con los turnos que los pacientes pueden solicitar, y los botones para agregar y quitar franjas eran iconos sin etiqueta.
+
+Se incorporó un texto introductorio que explica que los pacientes solo pueden solicitar turnos dentro de las franjas definidas, que se admiten hasta cuatro franjas por día —para contemplar, por ejemplo, un turno de mañana y otro de tarde— y que los horarios se toman por hora completa. Los botones pasaron a estar etiquetados, el botón de agregar se deshabilita al alcanzar el límite en lugar de ignorar la acción en silencio, y los días sin franjas cargadas muestran una indicación que distingue el día deshabilitado del día habilitado pero sin horarios.
 
 # Referencias
 
@@ -595,41 +638,3 @@ Ley N° 25.326 de Protección de los Datos Personales: <https://servicios.infole
 
 Ley N° 27.553 de Recetas Electrónicas o Digitales: <https://www.argentina.gob.ar/normativa/nacional/ley-27553-340919>
 
----
-
-## TODO LIST — PENDIENTES DEL INFORME
-
-### FASE 1 — CONSISTENCIA INFORME ↔ CÓDIGO
-
-- [x] Actualizar sección de base de datos: Prisma ORM + SQLite (reemplaza MySQL + PlanetScale), con el porqué de la migración
-- [x] Actualizar sección de Hosting: Vercel (frontends) + Render (REST API)
-- [x] Agregar subsección sobre el módulo de notificaciones por email (Nodemailer + Gmail + templates HTML)
-- [x] Actualizar sección de Testing con los tests reales implementados (Jest + Supertest, Vitest + Testing Library)
-
-### FASE 2 — CONTENIDO VISUAL (comentarios del tutor)
-
-- [ ] Implementación: Insertar la IMAGEN del diagrama de arquitectura en el Google Doc (archivo listo en docs/arquitectura.png; en este .md ya está referenciada)
-- [ ] Implementación: Agregar capturas de pantalla de todas las pantallas de las apps (paciente y médico) y describir para qué sirve cada una: Login, Dashboard, Pacientes, Detalle/EMR, Turnos, Nuevo turno, Horarios, Perfil, Videollamada
-
-### FASE 3 — REDACCIÓN
-
-- [x] Escenarios de uso concretos paso a paso (sección "Escenarios de uso": paciente rural, consulta pediátrica con seguimiento, incorporación de médica voluntaria)
-- [x] Conclusiones: Comparación con las otras soluciones del mercado (tabla comparativa + tres observaciones centrales)
-- [x] Trabajo a Futuro: redactar sección completa
-- [x] Referencias completas y organizadas por categoría (plataformas, tecnologías, hosting, marco normativo) — links de leyes y PlanetScale verificados
-
-### FASE 4 — DEPENDEN DE TERCEROS (arrancar ya, tienen demora)
-
-- [ ] Reunión con Marco Zani: realizar entrevista formal documentada y ampliar la sección
-- [ ] Reuniones con médicos: recopilar los testimonios enviados por WhatsApp y enriquecer la sección con citas textuales
-
-### FASE 5 — CIERRE
-
-- [ ] Introducción: escribir el párrafo final que adelanta el resto del informe (dejar para lo último)
-- [ ] Revisión general: ortografía, numeración de figuras, formato, consistencia de términos
-
-### COMPLETADOS ANTERIORES
-
-- [x] Antecedentes — E-Consulta, DOC24, Teleconsultas BA, UMA: descripciones completas
-- [x] Antecedentes: links, costos y evaluación personal de cada plataforma
-- [x] Testing: casos de prueba de aceptación documentados (CA-01 a CA-24)
