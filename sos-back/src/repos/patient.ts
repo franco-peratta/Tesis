@@ -60,7 +60,17 @@ export const getPatientByIdWithAppointments = async (id: number) => {
 }
 
 export const addPatient = async (patient: Omit<User & Patient, "id">) => {
-	const defaultPassword = "saludonlinesolidaria"
+	// Contraseña inicial de los pacientes que da de alta un médico, ya que ese
+	// formulario no pide contraseña. Se lee del entorno porque estaba escrita
+	// en el código de un repositorio público, donde servía para entrar a
+	// cualquier cuenta de paciente que no la hubiera cambiado.
+	const password = patient.password || process.env.DEFAULT_PATIENT_PASSWORD
+
+	if (!password) {
+		throw new Error(
+			"Falta la variable de entorno DEFAULT_PATIENT_PASSWORD para dar de alta un paciente sin contraseña"
+		)
+	}
 
 	const emr = patient.emr && patient.emr.length > 0 ? patient.emr : emrTemplate
 
@@ -74,7 +84,7 @@ export const addPatient = async (patient: Omit<User & Patient, "id">) => {
 			user: {
 				create: {
 					email: patient.email,
-					password: await bcrypt.hash(patient.password || defaultPassword, 10),
+					password: await bcrypt.hash(password, 10),
 					role: "patient"
 				}
 			}

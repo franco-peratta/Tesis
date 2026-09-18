@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
-import { auth } from '../middlewares/auth'
+import { auth, requireSelf } from '../middlewares/auth'
 import { getUserById } from '../repos/user'
 
 jest.mock('jsonwebtoken')
@@ -57,6 +57,45 @@ describe('auth middleware', () => {
     await auth(mockReq as any, mockRes as any, mockNext)
     expect(mockNext).toHaveBeenCalled()
     expect(mockReq.user).toEqual(fakeUser)
+    expect(mockRes.status).not.toHaveBeenCalled()
+  })
+})
+
+describe('requireSelf middleware', () => {
+  let mockRes: { status: jest.Mock; send: jest.Mock }
+  let mockNext: NextFunction
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+    mockRes = { status: jest.fn().mockReturnThis(), send: jest.fn() }
+    mockNext = jest.fn()
+  })
+
+  it('returns 403 when acting on a different user', async () => {
+    const req = { params: { id: '2' }, user: { id: 1, role: 'patient' } }
+    requireSelf(req as any, mockRes as any, mockNext)
+    expect(mockRes.status).toHaveBeenCalledWith(403)
+    expect(mockNext).not.toHaveBeenCalled()
+  })
+
+  it('returns 400 when the id is not a number', async () => {
+    const req = { params: { id: 'abc' }, user: { id: 1, role: 'patient' } }
+    requireSelf(req as any, mockRes as any, mockNext)
+    expect(mockRes.status).toHaveBeenCalledWith(400)
+    expect(mockNext).not.toHaveBeenCalled()
+  })
+
+  it('returns 403 when there is no authenticated user', async () => {
+    const req = { params: { id: '1' } }
+    requireSelf(req as any, mockRes as any, mockNext)
+    expect(mockRes.status).toHaveBeenCalledWith(403)
+    expect(mockNext).not.toHaveBeenCalled()
+  })
+
+  it('calls next when acting on your own record', async () => {
+    const req = { params: { id: '1' }, user: { id: 1, role: 'patient' } }
+    requireSelf(req as any, mockRes as any, mockNext)
+    expect(mockNext).toHaveBeenCalled()
     expect(mockRes.status).not.toHaveBeenCalled()
   })
 })
