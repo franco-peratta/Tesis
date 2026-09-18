@@ -110,11 +110,11 @@ const createPatientUser = async (data: TPatientUser) => {
 }
 
 const createProviderUser = async (data: TProviderUser) => {
-	const hashedPassword = await bcrypt.hash(data.password, 10)
-
+	// La contraseña se hashea en addProvider, igual que en el flujo de paciente.
+	// Hashearla acá también dejaba un doble hash que rompía el login.
 	const newUser: TProviderUser = {
 		email: data.email,
-		password: hashedPassword,
+		password: data.password,
 		role: "provider",
 		created_at: new Date(),
 		name: data.name,
